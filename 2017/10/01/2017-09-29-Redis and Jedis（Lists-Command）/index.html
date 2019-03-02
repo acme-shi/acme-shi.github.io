@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Redis and Jedis（Lists-Command） | 凌云的个人博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#102027">
+    
+    
+    <meta name="keywords" content="Redis,Jedis,NoSql,内存数据库,Key-Value,Command">
+    <meta name="description" content="Command介绍Redis中关于List的命令如下：  BLPOP key [key...] timeout： 获取并删除列表中的第一个元素，timeout表示阻塞时间。 123456#弹出名为tList的列表中的第一个元素，阻塞时间为10sBLPOP tList 10#按照顺序在l1、l2、l3三个列表中寻找一个元素并弹出。#redis首先弹出l1中的第一个元素并结束，如果l1为空，则弹出l2">
+<meta name="keywords" content="Redis,Jedis,NoSql,内存数据库,Key-Value,Command">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis and Jedis（Lists-Command）">
+<meta property="og:url" content="http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/index.html">
+<meta property="og:site_name" content="凌云的个人博客">
+<meta property="og:description" content="Command介绍Redis中关于List的命令如下：  BLPOP key [key...] timeout： 获取并删除列表中的第一个元素，timeout表示阻塞时间。 123456#弹出名为tList的列表中的第一个元素，阻塞时间为10sBLPOP tList 10#按照顺序在l1、l2、l3三个列表中寻找一个元素并弹出。#redis首先弹出l1中的第一个元素并结束，如果l1为空，则弹出l2">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-01T14:07:05.986Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis and Jedis（Lists-Command）">
+<meta name="twitter:description" content="Command介绍Redis中关于List的命令如下：  BLPOP key [key...] timeout： 获取并删除列表中的第一个元素，timeout表示阻塞时间。 123456#弹出名为tList的列表中的第一个元素，阻塞时间为10sBLPOP tList 10#按照顺序在l1、l2、l3三个列表中寻找一个元素并弹出。#redis首先弹出l1中的第一个元素并结束，如果l1为空，则弹出l2">
+    
+        <link rel="alternate" type="application/atom+xml" title="凌云的个人博客" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">凌云</h5>
+          <a href="mailto:feiqishi@foxmail.com" title="feiqishi@foxmail.com" class="mail">feiqishi@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                博文
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about">
+                <i class="icon icon-lg icon-link"></i>
+                关于我
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Redis and Jedis（Lists-Command）</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Redis and Jedis（Lists-Command）</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-01T01:28:25.000Z" itemprop="datePublished" class="page-time">
+  2017-10-01
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2017/">2017</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Command介绍"><span class="post-toc-number">1.</span> <span class="post-toc-text">Command介绍</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#参考资料"><span class="post-toc-number">2.</span> <span class="post-toc-text">参考资料</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2017-09-29-Redis and Jedis（Lists-Command）" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Redis and Jedis（Lists-Command）</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-01 09:28:25" datetime="2017-10-01T01:28:25.000Z" itemprop="datePublished">2017-10-01</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2017/">2017</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Command介绍"><a href="#Command介绍" class="headerlink" title="Command介绍"></a>Command介绍</h1><p><code>Redis</code>中关于<code>List</code>的命令如下：</p>
+<ul>
+<li><p><code>BLPOP key [key...] timeout</code>： 获取并删除列表中的第一个元素，timeout表示阻塞时间。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>弹出名为tList的列表中的第一个元素，阻塞时间为10s</span><br><span class="line">BLPOP tList 10</span><br><span class="line"><span class="meta">#</span>按照顺序在l1、l2、l3三个列表中寻找一个元素并弹出。</span><br><span class="line"><span class="meta">#</span>redis首先弹出l1中的第一个元素并结束，如果l1为空，则弹出l2中的第一个元素并结束，如果l2为空，</span><br><span class="line"><span class="meta">#</span>则弹出l3中的第一个元素并结束；如果l3为空，则进入10s阻塞时间。</span><br><span class="line">BLPOP l1 l2 l3 10</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>BRPOP key [key...] timeout</code>: 获取并删除列表的最后一个元素，timeout表示阻塞时间。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>弹出名为list的列表中的最后一个元素，阻塞时间为10s</span><br><span class="line">BRPOP list 10</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>BRPOPLPUSH source destination timeout</code>：弹出并删除source中的第一个元素，将其推入到destination中，阻塞时间为timeout。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>弹出l1中的第一个元素，并将其推入到l2中，阻塞时间为5s</span><br><span class="line">BRPOPLPUSH l1 l2 5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>LINDEX key index</code>: 获取列表中索引为index的元素</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>获取l1中索引为2的元素</span><br><span class="line">LINDEX l1 2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>LINSERT key BEFORE|AFTER pivot value</code>:在列表的元素pivot之前或者之后插入value</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>在列表l1中元素"hello"之前插入"word"</span><br><span class="line">LINSERT l1 BEFORE "hello" "word"</span><br><span class="line"><span class="meta">#</span>在列表l1中的元素"hello"之后插入"word"</span><br><span class="line">LINSERT l1 AFTER "hello" "word"</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>LLEN</code>：获取列表长度</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>获取列表l1的长度</span><br><span class="line">LLEN l1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>LPOP key</code>: 从队列的左边出队一个元素。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>从队列l1的左边弹出一个元素</span><br><span class="line">LPOP l1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>LPUSH key value [value ...]</code>: 从队列的左边入队一个或多个元素。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>从队列l1的左边入元素"hello"</span><br><span class="line">LPUSH l1 hello</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>LPUSHX key value</code>: 当队列存在时，从队列的左边入队一个元素（自然当队列不存在时redis不做操作了）。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>当l1存在时，将"hello"从l1的左边入队。</span><br><span class="line">LPUSHX l1 hello</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>LRANGE key statrt stop</code>: 获取队列中指定范围的元素。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>获取l1中index从2到4的元素</span><br><span class="line">LRANGE l1 2 4</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>LREM key count value</code>: 移除列表中的value（count参数的使用见下）。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>从左往右删除2个l1中的值为"hello"的元素</span><br><span class="line">LREM l1 2 hello</span><br><span class="line"><span class="meta">#</span>从右往左删除3个l1中值为"word"的元素</span><br><span class="line">LREM l1 -3 word</span><br><span class="line"><span class="meta">#</span>删除l1中所有的值为haha的元素</span><br><span class="line">LREM l1 0 haha</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>LSET key index value</code>: 设置列表中下标为index的值</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>设置l1中下标为2的元素的值为hello</span><br><span class="line">LSET l1 2 hello</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>LTRIM key start stop</code>: 清理列表，只保留从start到stop下标的元素。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>清理列表l1，保留指定范围元素(2-9)。</span><br><span class="line">LTRIM l1 2 9</span><br><span class="line"><span class="meta">#</span>清理列表l2，保留指定范围元素(1-l2中倒数第二个元素的下标)。</span><br><span class="line">LTRIM l2 1 -2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>RPOP key</code>: 从队列的右边出队一个元素并删除。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>从队列l1的右边弹出一个元素并删除</span><br><span class="line">RPOP l1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>RPOPLPUSH source destination</code>: 从source的右边出队一个元素，并将其从左边入队到destination中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>从l1的右边出队一个元素，并将其从左边入队到l2中去</span><br><span class="line">RPOPLPUSH l1 l2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>RPUSH key value [value...]</code>: 将元素从队列的右边入队。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>将元素hello从队列l1的右边入队</span><br><span class="line">RPUSH l1 hello</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>RPUSHX key value</code>: 如果队列存在时，从该队列的右边入队元素</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>如果队列l1存在，则从l1的右边入队元素hello</span><br><span class="line">RPUSHX l1 hello</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="http://redis.cn/commands.html#list" target="_blank" rel="noopener">Redis官方资料</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <footer>
+        <div class="author" align="right">
+            <a href="http://www.shifeiqi.top">
+                    凌云
+            </a>
+        </div>
+        <br>
+        Published under 
+        <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+            (CC) BY-NC-SA
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Command/">Command</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jedis/">Jedis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Key-Value/">Key-Value</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NoSql/">NoSql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存数据库/">内存数据库</a></li></ul>
+
+
+            <!-- 
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/&title=《Redis and Jedis（Lists-Command）》 — 凌云的个人博客&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/&title=《Redis and Jedis（Lists-Command）》 — 凌云的个人博客&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Redis and Jedis（Lists-Command）》 — 凌云的个人博客&url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+ -->
+
+        </div>
+    </div>
+
+    <!-- 
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Redis and Jedis（Lists-Java）</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/30/2017-09-29-Redis and Jedis（key生存时间管理-Java）/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Redis and Jedis（key生存时间管理-Java）</h4>
+      </a>
+    </div>
+  
+</nav>
+
+ -->
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div> -->
+    <div class="bottom">
+        <p><span>凌云 &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/&title=《Redis and Jedis（Lists-Command）》 — 凌云的个人博客&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/&title=《Redis and Jedis（Lists-Command）》 — 凌云的个人博客&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Redis and Jedis（Lists-Command）》 — 凌云的个人博客&url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACw0lEQVR42u3aQW7jMAwF0Nz/0hmgqwEC25+k2GbxtCrcxNJTAJEg9XrF4/0zPp9cPb9/z/+feX+Mq8/fv3k08PDw8FpLvxqfi84XkSwr/+79plzOhYeHh7fGuw8GyRLvvzs53O+pDxY8PDy8P+XlT+4xSYJeDU54eHh438nLD/1qAMjnwsPDw/seXlKMSBZ9P3F1ll+tteDh4eHFvO2De+Pvxf4eHh4e3qCrnhy78zS6WiwurBMPDw9vgVdNlycXBfISRu/aVmEX8fDw8I7y8imrhd18g+YrvAwMeHh4eEd5+cRJkp2nvPlW5nM1IxIeHh5ewKuWG3Je3rI620J7VX9cPDw8vFY/vVo+yINKftBPgtNDIQMPDw9vmTdPZ6sLqpaVy604PDw8vAVePn2vZXX/tvy/+dY0+2Z4eHh4Aa/XfMpLD9Xku9ceu/wB8PDw8BZ4vaO8Wpydp87Vxlg08PDw8Fq8+aWoPHOvhoq84Hv5Bjw8PLwFXh49esXTaqjIA1WeyuPh4eGd5Z1q/M9T4V5J4qGgjIeHh7fG20iLk1DR27gCEg8PD2+BV21QTZLjfNG9TXmYCw8PD+8Qb3JwV3trecljsjWFDh4eHh5ei3csYY234B2MKiBC4uHh4R3lVdtRG6l2tYBbSP3x8PDw1nj5S/PCQbXM0Uvl8fDw8H6fl7evkkO/t0F5aImuW82XhYeHhxeUIfJGfnJlKk+X5wWLZv0YDw8Pb8zLiwjzBPfAovHw8PD+iPcujl4qnASS6pPkk3h4eHgbvEnwSI71agk4b4BNWm54eHh4c14eDHrl3SSE9BLxZLPw8PDw9ni9IkUv/uQp+6TygIeHh/c9vGT6avqbhI08KR8FBjw8PLyjvAk4LzRUE+6HsggeHh7eGu9s06t3uFdbcQcuEODh4eEt31861cSqwg4Uc/Hw8PDO8P4Bhmcr8L9TyOAAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '凌云';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '凌云';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
