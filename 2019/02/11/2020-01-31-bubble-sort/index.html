@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>冒泡排序 | 凌云的个人博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#102027">
+    
+    
+    <meta name="keywords" content="算法,数据结构">
+    <meta name="description" content="💣 原理 冒泡排序基本思想：    将待排序队列分为未排序子队列（位于左侧，初始值为待排序队列）和已排序子队列（位于右侧，初始值为空）。 走访未排序子队列，选择未排序子队列中的最大值交换到未排序子队列的列尾。 未排序子队列长度减一， 已排序子队列长度加一。 未排序子队列长度 == 0 ?  排序结束 ：  重复第2步。     时间复杂度：O(n^2)。    稳定。  🔫 示例  以下是对队">
+<meta name="keywords" content="算法,数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="冒泡排序">
+<meta property="og:url" content="http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/index.html">
+<meta property="og:site_name" content="凌云的个人博客">
+<meta property="og:description" content="💣 原理 冒泡排序基本思想：    将待排序队列分为未排序子队列（位于左侧，初始值为待排序队列）和已排序子队列（位于右侧，初始值为空）。 走访未排序子队列，选择未排序子队列中的最大值交换到未排序子队列的列尾。 未排序子队列长度减一， 已排序子队列长度加一。 未排序子队列长度 == 0 ?  排序结束 ：  重复第2步。     时间复杂度：O(n^2)。    稳定。  🔫 示例  以下是对队">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-02T12:13:38.905Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="冒泡排序">
+<meta name="twitter:description" content="💣 原理 冒泡排序基本思想：    将待排序队列分为未排序子队列（位于左侧，初始值为待排序队列）和已排序子队列（位于右侧，初始值为空）。 走访未排序子队列，选择未排序子队列中的最大值交换到未排序子队列的列尾。 未排序子队列长度减一， 已排序子队列长度加一。 未排序子队列长度 == 0 ?  排序结束 ：  重复第2步。     时间复杂度：O(n^2)。    稳定。  🔫 示例  以下是对队">
+    
+        <link rel="alternate" type="application/atom+xml" title="凌云的个人博客" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">凌云</h5>
+          <a href="mailto:feiqishi@foxmail.com" title="feiqishi@foxmail.com" class="mail">feiqishi@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                博文
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about">
+                <i class="icon icon-lg icon-link"></i>
+                关于我
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">冒泡排序</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">冒泡排序</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-02-11T07:58:00.000Z" itemprop="datePublished" class="page-time">
+  2019-02-11
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2019/">2019</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#💣-原理"><span class="post-toc-number">1.</span> <span class="post-toc-text">💣 原理</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#🔫-示例"><span class="post-toc-number">2.</span> <span class="post-toc-text">🔫 示例</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#🔪-算法实现"><span class="post-toc-number">3.</span> <span class="post-toc-text">🔪 算法实现</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2020-01-31-bubble-sort" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">冒泡排序</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-02-11 15:58:00" datetime="2019-02-11T07:58:00.000Z" itemprop="datePublished">2019-02-11</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2019/">2019</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h3 id="💣-原理"><a href="#💣-原理" class="headerlink" title="💣 原理"></a>💣 原理</h3><ul>
+<li><p>冒泡排序基本思想：  </p>
+<ol>
+<li>将待排序队列分为<code>未排序子队列</code>（位于左侧，初始值为待排序队列）和<code>已排序子队列</code>（位于右侧，初始值为空）。</li>
+<li>走访<code>未排序子队列</code>，选择<code>未排序子队列</code>中的最大值交换到<code>未排序子队列</code>的列尾。</li>
+<li><code>未排序子队列</code>长度减一， <code>已排序子队列</code>长度加一。</li>
+<li><code>未排序子队列</code>长度 == 0 ?  排序结束 ：  重复第2步。  </li>
+</ol>
+</li>
+<li><p>时间复杂度：<code>O(n^2)。</code>  </p>
+</li>
+<li>稳定。</li>
+</ul>
+<h3 id="🔫-示例"><a href="#🔫-示例" class="headerlink" title="🔫 示例"></a>🔫 示例</h3><p>  以下是对队列 <code>[4, 2, 3, 6, 8, 1, 5]</code> 进行冒泡排序的模拟过程（注：算法抽象过程描述，非程序运行过程）。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>     [<span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">1</span>, <span class="number">5</span> ]</span><br><span class="line">      [    未排序子队列     ] [已排序子队列]    <span class="comment">// 将待排序队列分为 [未排序子队列] 和 [已排序子队列]</span></span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line"><span class="number">1</span>     [<span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>,    <span class="number">1</span>, <span class="number">5</span>,   <span class="number">8</span>]</span><br><span class="line">      [    未排序子队列     ] [已排序子队列]    <span class="comment">//第1次走访，</span></span><br><span class="line">                                              <span class="comment">//选取当前未排序子队列中最大值8冒泡到最后</span></span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line"><span class="number">2</span>     [<span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>,       <span class="number">1</span>, <span class="number">5</span>,   <span class="number">6</span>, <span class="number">8</span>]</span><br><span class="line">      [    未排序子队列     ] [已排序子队列]    <span class="comment">//第2次走访，</span></span><br><span class="line">                                              <span class="comment">//选取当前未排序子队列中最大值6冒泡到最后</span></span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line"><span class="number">3</span>     [<span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>,       <span class="number">1</span>,      <span class="number">5</span>,  <span class="number">6</span>, <span class="number">8</span>]</span><br><span class="line">      [    未排序子队列     ] [已排序子队列]    <span class="comment">//第3次走访，</span></span><br><span class="line">                                              <span class="comment">//选取当前未排序子队列中最大值5冒泡到最后</span></span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line"><span class="number">4</span>     [   <span class="number">2</span>, <span class="number">3</span>,       <span class="number">1</span>,      <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">8</span>]</span><br><span class="line">      [    未排序子队列     ] [已排序子队列]    <span class="comment">//第4次走访，</span></span><br><span class="line">                                              <span class="comment">//选取当前未排序子队列中最大值4冒泡到最后</span></span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line"><span class="number">5</span>     [   <span class="number">2</span>,          <span class="number">1</span>,      <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">8</span>]</span><br><span class="line">      [    未排序子队列     ] [已排序子队列]    <span class="comment">//第5次走访，</span></span><br><span class="line">                                              <span class="comment">//选取当前未排序子队列中最大值3冒泡到最后</span></span><br><span class="line">------------------------------------------------------------------------------------                                              </span><br><span class="line"><span class="number">6</span>     [               <span class="number">1</span>,      <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">8</span>]</span><br><span class="line">      [    未排序子队列     ] [已排序子队列]    <span class="comment">//第6次走访，</span></span><br><span class="line">                                              <span class="comment">//选取当前未排序子队列中最大值2冒泡到最后</span></span><br><span class="line">------------------------------------------------------------------------------------                                              </span><br><span class="line"><span class="number">7</span>     [                       <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">8</span>]</span><br><span class="line">      [    未排序子队列     ] [已排序子队列]    <span class="comment">//第7次走访，</span></span><br><span class="line">                                              <span class="comment">//选取当前未排序子队列中最大值1冒泡到最后</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="🔪-算法实现"><a href="#🔪-算法实现" class="headerlink" title="🔪 算法实现"></a>🔪 算法实现</h3><ul>
+<li><p>Java实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// swap</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] array, <span class="keyword">int</span> lIndex, <span class="keyword">int</span> rIndex)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp = array[lIndex];</span><br><span class="line">    array[lIndex] = array[rIndex];</span><br><span class="line">    array[rIndex] = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// sort interface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] bubbleSort(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">    <span class="keyword">int</span>[] array = Arrays.copyOf(nums, nums.length);</span><br><span class="line">    <span class="comment">// bubble sort</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; array.length - i - <span class="number">1</span>; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (array[j] &gt; array[j + <span class="number">1</span>])</span><br><span class="line">                swap(array, j, j + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>JavaScript实现</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// swap</span></span><br><span class="line"><span class="keyword">const</span> swap = <span class="function">(<span class="params">array, lIndex, rIndex</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> tmp = array[lIndex];</span><br><span class="line">    array[lIndex] = array[rIndex];</span><br><span class="line">    array[rIndex] = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// sort interface</span></span><br><span class="line"><span class="keyword">const</span> bubbleSort = <span class="function"><span class="params">nums</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> array = nums.slice();</span><br><span class="line">    <span class="comment">// bubble sort</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> j = <span class="number">0</span>; j &lt; array.length - i - <span class="number">1</span>; j++)</span><br><span class="line">      <span class="keyword">if</span>(array[j] &gt; array[j + <span class="number">1</span>])</span><br><span class="line">        swap(array, j, j + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <footer>
+        <div class="author" align="right">
+            <a href="http://www.shifeiqi.top">
+                    凌云
+            </a>
+        </div>
+        <br>
+        Published under 
+        <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+            (CC) BY-NC-SA
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+
+            <!-- 
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/&title=《冒泡排序》 — 凌云的个人博客&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/&title=《冒泡排序》 — 凌云的个人博客&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《冒泡排序》 — 凌云的个人博客&url=http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+ -->
+
+        </div>
+    </div>
+
+    <!-- 
+ -->
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div> -->
+    <div class="bottom">
+        <p><span>凌云 &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/&title=《冒泡排序》 — 凌云的个人博客&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/&title=《冒泡排序》 — 凌云的个人博客&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《冒泡排序》 — 凌云的个人博客&url=http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2019/02/11/2020-01-31-bubble-sort/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3aQW6EMAwF0Ln/pel2qlbwbTNVSV5WFWUgj8WXE+f1isfxNt6v5Pef31n9VXNgYGA8lnGcjnNGPtHqk/O5YWBg7MNIonAyrXP2+bvO78fAwMDoheDPZ05iHQMDA6PKyIvF/EPk78XAwNiZkQfopPjLg/iDa3EMDIwHMvJd97//+yP9DQwMjEcxjuLIC74kTG+bFQYGxtKMPOCqmBzZC1wMDIzdGNXjEXdFbbWdcNtBMQwMjMcyzic6OrA12HTL4xsDA2NVRjUEk3A8n1wv7i/SFQMDY2nGpBkw36TrxXf502BgYCzBmEwoCb7qf5tLWQwMjKUZvSMO1eNc+fVqewADA2NtRvKz6mIyXwbnFesFGwMDY2lGslmfvKwal/kbC2AMDIxFGdWGYvLQPECTqUdlIgYGxsaMXnOxV971wN8qXAwMjG0YvU35nF09zFFoBmBgYCzNeBVHTu1NMSlJMTAw9mFMWpV3LVCrH64QxBgYGAsx8pOt+QGLXozmJeMvnwYDA2MbRt4YSIrF6lJ5stjGwMDYgTFZjk424KqF40VpiIGBsRzjKI7qEnd+OLVZ22JgYCzEmGy69Tbxk9ff3ODEwMBYglE9ElFdavZKz3LgYmBgbMDIg693Zf6ZLiIeAwMDI16C5q2FaqReUDEwMDDiBkAylUnR+cHAxcDA+PeM6pGvyRbb5OjYDdttGBgYD2TkS8deKN/buxg1MjEwMJ7H+AKVHJNhuEG5/AAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '凌云';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '凌云';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

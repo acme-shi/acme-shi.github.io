@@ -14,7 +14,7 @@
     
     
     
-    <title>凌云的个人博客</title>
+    <title>Tags: 数据结构 | 凌云的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#102027">
@@ -25,7 +25,7 @@
 <meta name="keywords" content="cloudups, shifeiqi, blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="凌云的个人博客">
-<meta property="og:url" content="http://www.shifeiqi.top/index.html">
+<meta property="og:url" content="http://www.shifeiqi.top/tags/数据结构/index.html">
 <meta property="og:site_name" content="凌云的个人博客">
 <meta property="og:description" content="凌云的博客">
 <meta property="og:locale" content="zh-CN">
@@ -66,7 +66,7 @@
     <div class="scroll-wrap flex-col">
       <ul class="nav">
         
-            <li class="waves-block waves-effect active">
+            <li class="waves-block waves-effect">
               <a href="/">
                 <i class="icon icon-lg icon-home"></i>
                 主页
@@ -80,7 +80,7 @@
               </a>
             </li>
         
-            <li class="waves-block waves-effect">
+            <li class="waves-block waves-effect active">
               <a href="/tags">
                 <i class="icon icon-lg icon-tags"></i>
                 标签
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">凌云的个人博客</div>
+        <div class="flex-col header-title ellipsis">Tags: 数据结构</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -131,39 +131,56 @@
         
     </div>
 </header>
-<header class="content-header index-header">
+<header class="content-header tags-header">
 
     <div class="container fade-scale">
-        <h1 class="title">凌云的个人博客</h1>
+        <h1 class="title">Tags: 数据结构</h1>
         <h5 class="subtitle">
-            
-                
             
         </h5>
     </div>
 
     
+<div class="tabs-bar container">
+    <nav class="tags-list">
+        <a href="/tags" style="-webkit-order:-1;order:-1" class="tags-list-item waves-effect waves-button waves-light
+            ">全部</a>
+        
+
+            <a href="/tags/算法/" style="-webkit-order:0;order:0" class="tags-list-item waves-effect waves-button waves-light">算法</a>
+
+        
+
+            <a href="/tags/数据结构/" style="-webkit-order:1;order:1" class="tags-list-item waves-effect waves-button waves-light active">数据结构</a>
+
+        
+    </nav>
+    <!-- PC show more-->
+    <div class="tags-list-more">
+        <a href="javascript:;" onclick="BLOG.tabBar(this)" class="action tags-list-item waves-effect waves-circle waves-light"><i class="icon icon-ellipsis-h"></i></a>
+    </div>
+</div>
+
 
 
 </header>
 
-<div class="container body-wrap">
-
-    <ul class="post-list">
+<div class="container body-wrap fade">
     
-        <li class="post-list-item fade">
-            <article id="post-2020-01-31-bubble-sort" class="article-card article-type-post" itemprop="blogPost">
+            <div class="waterfall">
+          
 
+            <div class="waterfall-item">
+  <article class="article-card archive-article">
     <div class="post-meta">
-        <time class="post-time" title="2019-02-11 15:58:00" datetime="2019-02-11T07:58:00.000Z" itemprop="datePublished">2019-02-11</time>
+      <time class="post-time" title="2019-02-11 15:58:00" datetime="2019-02-11T07:58:00.000Z" itemprop="datePublished">2019-02-11</time>
 
-        
+      
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2019/">2019</a></li></ul>
 
 
 
     </div>
-
     
 
 
@@ -175,30 +192,6 @@
 
 
 
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        💣 原理
-冒泡排序基本思想：  
-
-将待排序队列分为未排序子队列（位于左侧，初始值为待排序队列）和已排序子队列（位于右侧，初始值为空）。
-走访未排序子队列，选择未排序子队列中的最大值交换到未排序子队列的列尾。
-未排序子队列长度减一， 已排序子队列长度加一。
-未排序子队列长度 == 0 ?  排序结束 ：  重复第2步。  
-
-
-时间复杂度：O(n^2)。  
-
-稳定。
-
-🔫 示例  以下...
-    
-
-        <a href="/2019/02/11/2020-01-31-bubble-sort/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
     
     <div class="post-footer">
         
@@ -206,15 +199,15 @@
 
     </div>
     
-</article>
-
-        </li>
-    
-    </ul>
-
-    
-
+  </article>
 </div>
+
+        
+            </div>
+        
+    
+</div>
+
 
         <footer class="footer">
     <!-- <div class="top">
@@ -246,7 +239,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/&title=凌云的个人博客&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/tags/数据结构/&title=凌云的个人博客&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -256,22 +249,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/&title=凌云的个人博客&source=凌云的博客" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/tags/数据结构/&title=凌云的个人博客&source=凌云的博客" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/tags/数据结构/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=凌云的个人博客&url=http://www.shifeiqi.top/&via=http://www.shifeiqi.top" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=凌云的个人博客&url=http://www.shifeiqi.top/tags/数据结构/&via=http://www.shifeiqi.top" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/tags/数据结构/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -282,7 +275,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAAAAAAZai4+AAABTUlEQVR42u3aQRKEIAxEUe9/aaZqtip2J7iQ/qymVOC5mBAixyG38W/6k+d2vNFgwdqINabtzFImdvte0GHBimTNg0In9ijjwIIFS2fNA4dyBRYsWGsDRGephgULVidpdu+6T8KClczqJL7u7xfrW7BgfZY1Sk0fszYLLFhprLuB3A8tCl3Z+j50gAUrgOVOowztLtgXAQIWrBhWjaKny0qZ6XZGWLACWHqHVWWj1iINC9amLDc0rFrai5VmWLACWLXjAvqVefh4yOVhwQpg1TalevGoVq6CBSuNpSe7b29iYcGCpfyNlWW1n3zDgpXGqh0FcEu0dtIMC1YYq59GuwXc+eZ2WXYPC9YHWauCQqeQBAsWLDdFVp53Q4907AAWLFiNpbo2MixYsGoFJvdu8aMmLFhbs/TjdHpfPUzAggXLLSS5BaPaC8OCFcP6AVgw7jadPsD+AAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABxklEQVR42u3aS27DMAwFwN7/0ukBjNiPpKQkwHgVFE407uLB/Pz9xdfrclXvv34r+Z3mhYuLO+a+bq/8+OudV9b95+gUXFzcg9x3B+fHJN+d3IOLi/v93Dz+qmGHi4v7i9zJ8R8IMlxc3AG3Gkl5mZSUT1tqNVxc3AE371Lu+7ylv4uLi9vivopX/oIyiba3p+Pi4h7hVguVfFB6jxudi4uLe4SbBNA9sReFC1Y9cHFxt3GrjdHkR+erG9ErDi4u7jZub5EiH370xjAPZ+Hi4m7j9lqZvXZG3ih5+zC4uLgHufOx6KpmysM/DhcX96PcKj1vbeRlTyHIcHFxl3LzIqTXPJ3nT6FWw8XFXcqtjjp6sTV/AFxc3G/g5kGWN0SSgufh77i4uMe51UZGElWTCc9DkOHi4m7m9hazes2U3tgVFxf3U9y81KkuW+Ql1sM9uLi4m7mTRYp5eOXRhouLe5Lba4lWw64XiKNmLi4u7pjba3pGSxLFhuyCFx1cXNyl3FXN0KTlseD1BRcX98u4+dgjibZkXQMXF/fXuflItZlduLi4B7nl1cliIVRdv3gYsuLi4m7m9iqOfDnj/pGqqxi4uLibuf+g8eIxX/JQCwAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
