@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Redis and Jedis（Lists-Java） | 韶华易逝，莫回头</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JAVA,Redis,Jedis,NoSql,内存数据库,Key-Value">
+    <meta name="description" content="API介绍及示例Jedis中关于List操作的API如下：  Jedis.blpop(int timeout,String... keys)：从左边获取并删除列表中的第一个元素，timeout表示阻塞时间。  123456789101112// 创建Redis客户端实例Jedis jedis = new Jedis(&quot;10.1.10.53&quot;, 6379);// 授权jedis.auth(&quot;redi">
+<meta name="keywords" content="JAVA,Redis,Jedis,NoSql,内存数据库,Key-Value">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis and Jedis（Lists-Java）">
+<meta property="og:url" content="http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/index.html">
+<meta property="og:site_name" content="韶华易逝，莫回头">
+<meta property="og:description" content="API介绍及示例Jedis中关于List操作的API如下：  Jedis.blpop(int timeout,String... keys)：从左边获取并删除列表中的第一个元素，timeout表示阻塞时间。  123456789101112// 创建Redis客户端实例Jedis jedis = new Jedis(&quot;10.1.10.53&quot;, 6379);// 授权jedis.auth(&quot;redi">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-01T14:07:05.986Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis and Jedis（Lists-Java）">
+<meta name="twitter:description" content="API介绍及示例Jedis中关于List操作的API如下：  Jedis.blpop(int timeout,String... keys)：从左边获取并删除列表中的第一个元素，timeout表示阻塞时间。  123456789101112// 创建Redis客户端实例Jedis jedis = new Jedis(&quot;10.1.10.53&quot;, 6379);// 授权jedis.auth(&quot;redi">
+    
+        <link rel="alternate" type="application/atom+xml" title="韶华易逝，莫回头" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">凌云</h5>
+          <a href="mailto:feiqishi@foxmail.com" title="feiqishi@foxmail.com" class="mail">feiqishi@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                博文
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom">
+                <i class="icon icon-lg icon-link"></i>
+                关于我
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Redis and Jedis（Lists-Java）</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Redis and Jedis（Lists-Java）</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-01T01:28:25.000Z" itemprop="datePublished" class="page-time">
+  2017-10-01
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2017/">2017</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#API介绍及示例"><span class="post-toc-number">1.</span> <span class="post-toc-text">API介绍及示例</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#参考资料"><span class="post-toc-number">2.</span> <span class="post-toc-text">参考资料</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2017-09-29-Redis and Jedis（Lists-Java）" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Redis and Jedis（Lists-Java）</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-01 09:28:25" datetime="2017-10-01T01:28:25.000Z" itemprop="datePublished">2017-10-01</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2017/">2017</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="API介绍及示例"><a href="#API介绍及示例" class="headerlink" title="API介绍及示例"></a>API介绍及示例</h1><p><code>Jedis</code>中关于<code>List</code>操作的API如下：</p>
+<ul>
+<li><code>Jedis.blpop(int timeout,String... keys)</code>：从左边获取并删除列表中的第一个元素，timeout表示阻塞时间。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 弹出名为tList的列表中的第一个元素，阻塞时间为10s</span></span><br><span class="line">List&lt;String&gt; ret1 = jedis.blpop(<span class="number">10</span>, <span class="string">"tList"</span>);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 按照顺序在l1、l2、l3三个列表中寻找一个元素并弹出。</span></span><br><span class="line"><span class="comment"> * redis首先弹出l1中的第一个元素并结束，如果l1为空，则弹出l2中的第一个元素并结束，如果l2为空，</span></span><br><span class="line"><span class="comment"> * 则弹出l3中的第一个元素并结束；如果l3为空，则进入10s阻塞时间。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">List&lt;String&gt; ret2 = jedis.blpop(<span class="number">10</span>, <span class="string">"l1"</span>, <span class="string">"l2"</span>, <span class="string">"l3"</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>Jedis.brpop(int timeout,String... keys);</code>: 从右边获取并删除列表的第一个元素，timeout表示阻塞时间。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 从右边获取并删除列表list的第一个元素，阻塞时间为10s</span></span><br><span class="line">List&lt;String&gt; ret1 = jedis.brpop(<span class="number">10</span>, <span class="string">"list"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.brpoplpush(String source,String destination,int timeout)</code>：弹出并删除source中的第一个元素，将其推入到destination中，阻塞时间为timeout。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">  Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line">  <span class="comment">// 授权</span></span><br><span class="line">  jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line">  <span class="comment">// 弹出l1中的第一个元素，并将其推入到l2中，阻塞时间为5s</span></span><br><span class="line">  String ret = jedis.brpoplpush(<span class="string">"l1"</span>, <span class="string">"l2"</span>, <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.lindex(key, index)</code>: 获取列表中索引为index的元素</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 获取l1中索引为2的元素</span></span><br><span class="line">String ret = jedis.lindex(<span class="string">"l1"</span>, <span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.linsert(String key,LIST_POSITION where,String pivot,String value)</code>:在列表的元素pivot之前或者之后插入value</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 在列表l1中元素"hello"之前插入"word"</span></span><br><span class="line">Long ret = jedis.linsert(<span class="string">"l1"</span>, LIST_POSITION.BEFORE, <span class="string">"hello"</span>, <span class="string">"word"</span>);</span><br><span class="line"><span class="comment">// 在列表l1中的元素"hello"之后插入"word"</span></span><br><span class="line">Long ret2 = jedis.linsert(<span class="string">"l1"</span>, LIST_POSITION.AFTER, <span class="string">"hello"</span>, <span class="string">"word"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.llen(String key);</code>：获取列表长度</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 获取列表l1的长度</span></span><br><span class="line">Long ret = jedis.llen(<span class="string">"l1"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.lpop(String key)</code>: 从队列的左边出队一个元素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 从队列l1的左边弹出一个元素</span></span><br><span class="line">String ret = jedis.lpop(<span class="string">"l1"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.lpush(String key,String... strings)</code>: 从队列的左边入队一个或多个元素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 从队列l1的左边入元素"hello"</span></span><br><span class="line"><span class="keyword">long</span> ret = jedis.lpush(<span class="string">"l1"</span>, <span class="string">"hello"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.lpushx(String key,String... string);</code>: 当队列存在时，从队列的左边入队一个元素（自然当队列不存在时redis不做操作了）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">//当l1存在时，将"hello"从l1的左边入队。</span></span><br><span class="line"><span class="keyword">long</span> ret = jedis.lpushx(<span class="string">"l1"</span>, <span class="string">"hello"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.lrange(String key,long start,long end);</code>: 获取队列中指定范围的元素,从左向右。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 获取l1中index从2到4的元素</span></span><br><span class="line">List&lt;String&gt; ret = jedis.lrange(<span class="string">"l1"</span>, <span class="number">2</span>, <span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.lrem(String key,long count,long value)</code>: 移除列表中的value（count参数的使用见下）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 从左往右删除2个l1中的值为"hello"的元素</span></span><br><span class="line">Long ret = jedis.lrem(<span class="string">"l1"</span>, <span class="number">2</span>, <span class="string">"hello"</span>);</span><br><span class="line"><span class="comment">// 从右往左删除3个l1中值为"word"的元素</span></span><br><span class="line"><span class="keyword">long</span> ret2 = jedis.lrem(<span class="string">"l1"</span>, -<span class="number">3</span>, <span class="string">"hello"</span>);</span><br><span class="line"><span class="comment">// 删除l1中所有的值为haha的元素</span></span><br><span class="line"><span class="keyword">long</span> ret3 = jedis.lrem(<span class="string">"l1"</span>, <span class="number">0</span>, <span class="string">"haha"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.lset(String key,long index,String value)</code>: 设置列表中下标为index(从左到右)的值,</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 设置l1中下标为2的元素的值为hello</span></span><br><span class="line">String ret = jedis.lset(<span class="string">"l1"</span>, <span class="number">2</span>, <span class="string">"hello"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.ltrim(String key,long start,long end)</code>: 清理列表，只保留从start到stop下标的元素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 清理列表l1，保留指定范围元素(2-9)。</span></span><br><span class="line">String ret = jedis.ltrim(<span class="string">"l1"</span>, <span class="number">2</span>, <span class="number">9</span>);</span><br><span class="line"><span class="comment">// 清理列表l2，保留指定范围元素(1-l2中倒数第二个元素的下标)。</span></span><br><span class="line">String ret2 = jedis.ltrim(<span class="string">"l1"</span>, <span class="number">1</span>, -<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.rpop(String key)</code>: 从队列的右边出队一个元素并删除。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 从队列l1的右边弹出一个元素并删除</span></span><br><span class="line">String value = jedis.rpop(<span class="string">"l1"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.rpoplpush(String srckey,String dstkey)</code>: 从source的右边出队一个元素，并将其从左边入队到destination中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 从l1的右边出队一个元素，并将其从左边入队到l2中去</span></span><br><span class="line">String ret = jedis.rpoplpush(<span class="string">"l1"</span>, <span class="string">"l2"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.rpush(String key,String... strings)</code>: 将元素从队列的右边入队。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 将元素hello从队列l1的右边入队</span></span><br><span class="line"><span class="keyword">long</span> ret = jedis.rpush(<span class="string">"l1"</span>, <span class="string">"hello"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Jedis.rpushx(String key,String... string)</code>: 如果队列存在时，从该队列的右边入队元素</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Redis客户端实例</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"10.1.10.53"</span>, <span class="number">6379</span>);</span><br><span class="line"><span class="comment">// 授权</span></span><br><span class="line">jedis.auth(<span class="string">"redis"</span>);</span><br><span class="line"><span class="comment">// 如果队列l1存在，则从l1的右边入队元素hello</span></span><br><span class="line"><span class="keyword">long</span> ret = jedis.rpushx(<span class="string">"l1"</span>, <span class="string">"hello"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://github.com/xetorthio/jedis" target="_blank" rel="noopener">Jedis官方文档</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <footer>
+        <div class="author" align="right">
+            <a href="http://www.shifeiqi.top">
+                    凌云
+            </a>
+        </div>
+        <br>
+        Published under 
+        <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+            (CC) BY-NC-SA
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jedis/">Jedis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Key-Value/">Key-Value</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NoSql/">NoSql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存数据库/">内存数据库</a></li></ul>
+
+
+            <!-- 
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/&title=《Redis and Jedis（Lists-Java）》 — 韶华易逝，莫回头&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/&title=《Redis and Jedis（Lists-Java）》 — 韶华易逝，莫回头&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Redis and Jedis（Lists-Java）》 — 韶华易逝，莫回头&url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+ -->
+
+        </div>
+    </div>
+
+    <!-- 
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/08/01/2018-08-01-设计模式-单例模式/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">设计模式-单例模式</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/01/2017-09-29-Redis and Jedis（Lists-Command）/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Redis and Jedis（Lists-Command）</h4>
+      </a>
+    </div>
+  
+</nav>
+
+ -->
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div> -->
+    <div class="bottom">
+        <p><span>凌云 &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/&title=《Redis and Jedis（Lists-Java）》 — 韶华易逝，莫回头&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/&title=《Redis and Jedis（Lists-Java）》 — 韶华易逝，莫回头&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Redis and Jedis（Lists-Java）》 — 韶华易逝，莫回头&url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2017/10/01/2017-09-29-Redis and Jedis（Lists-Java）/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsUlEQVR42u3aQY7jMAwEwPn/p7PXAXatNEkxyALlU2DEisoHUWnq5ye+Xr+uv+/8vv/0/WTk8zjJaM0LDw8PbzD1p+GePieYp++ff/38u8mc8fDw8LZ552k9DX1evpOfT+4kr/jxPh4eHt4X8M5PTUpF8hLx8PDw/i9edXEvTCIIIPDw8PC+jZeEAudBJ69pfv9C1oKHh4cX8/Iu0vd8Xunv4eHh4Y276vNmWG/k/BjBmzHx8PDwFni9owPVLfU8Gh6FHXh4eHhXedVm/+SIQPJSkrCj0CrDw8PDW+DdCiOqJaEXIs/LEh4eHt6clyyve62pHJOP/4//Cnh4eHhXeeUDTK2WWP5Set8plAc8PDy8MS/ZEOcRat4qm+zxC4cM8PDw8NZ4+c8XumrjIpG3x94UBjw8PLw1XvV4UzWEvRVzFJpqeHh4eGu8ZOjkFfQKTFJserEIHh4e3h6v+uc/h+U72zzOyEfGw8PD2+P1pvXVAW51Wnh4eHhFXt68r06ieiygGmRcSKnx8PDwBrzexnoSLlS3yOUx8fDw8BZ481g2b1AlG/Q89s1LER4eHt5dXjUmyOOJvGHWC3CbZ8rw8PDwxrzegl4NFOZLfBOGh4eHt8brXdXtb+8AwXmE1/HCw8PD2+O9BldvA12NdPNShIeHh/dJ3uQwQbJ83w2LC/UNDw8Pb5k3OQKVN8aSkjAvSHh4eHif4fU+542xybPVoAQPDw9vgzeJHjbKxq3R8PDw8PZ483ZXXgby0Sbb9MvdPDw8PLyHuSXFIAlw82bY3abam2fx8PDw1nhJY6xaHnqb6Ukdi1JqPDw8vI/zJkt/jslbaG9eCh4eHt4X8CaHtM6TrhabqFzh4eHhrfGqYUR1sZ4ctBpFw3h4eHgLvMnSnC/c+bGD/NkLhwbw8PDwarw/jYJk4SSd/N8AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '凌云';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '凌云';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

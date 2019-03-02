@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>JAVA对象序列化之BYTE流 | 韶华易逝，莫回头</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JAVA,对象,序列化,BYTE">
+    <meta name="description" content="写在前面最近项目上有一个需求需要大量的将Java对象进行序列化并且进行还原，本文将介绍如何将Java对象序列化为Byte。 构造可序列化对象一个Java对象可序列化的前提是这个对象可序列化（😰。。。），具体来讲就是给这个Java对象打上可序列化的标志。一般的做法是实现接口 Serializable ,如下面的代码，定义一个可序列化的 Apple 类。12345678910111213141516">
+<meta name="keywords" content="JAVA,对象,序列化,BYTE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA对象序列化之BYTE流">
+<meta property="og:url" content="http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/index.html">
+<meta property="og:site_name" content="韶华易逝，莫回头">
+<meta property="og:description" content="写在前面最近项目上有一个需求需要大量的将Java对象进行序列化并且进行还原，本文将介绍如何将Java对象序列化为Byte。 构造可序列化对象一个Java对象可序列化的前提是这个对象可序列化（😰。。。），具体来讲就是给这个Java对象打上可序列化的标志。一般的做法是实现接口 Serializable ,如下面的代码，定义一个可序列化的 Apple 类。12345678910111213141516">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-01T14:07:05.986Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JAVA对象序列化之BYTE流">
+<meta name="twitter:description" content="写在前面最近项目上有一个需求需要大量的将Java对象进行序列化并且进行还原，本文将介绍如何将Java对象序列化为Byte。 构造可序列化对象一个Java对象可序列化的前提是这个对象可序列化（😰。。。），具体来讲就是给这个Java对象打上可序列化的标志。一般的做法是实现接口 Serializable ,如下面的代码，定义一个可序列化的 Apple 类。12345678910111213141516">
+    
+        <link rel="alternate" type="application/atom+xml" title="韶华易逝，莫回头" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">凌云</h5>
+          <a href="mailto:feiqishi@foxmail.com" title="feiqishi@foxmail.com" class="mail">feiqishi@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                博文
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom">
+                <i class="icon icon-lg icon-link"></i>
+                关于我
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">JAVA对象序列化之BYTE流</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">JAVA对象序列化之BYTE流</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-27T05:25:00.000Z" itemprop="datePublished" class="page-time">
+  2017-08-27
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2017/">2017</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#写在前面"><span class="post-toc-number">1.</span> <span class="post-toc-text">写在前面</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#构造可序列化对象"><span class="post-toc-number">2.</span> <span class="post-toc-text">构造可序列化对象</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#序列化Java对象"><span class="post-toc-number">3.</span> <span class="post-toc-text">序列化Java对象</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#反序列化Java对象"><span class="post-toc-number">4.</span> <span class="post-toc-text">反序列化Java对象</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2017-08-29-JAVA对象序列化之BYTE流" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">JAVA对象序列化之BYTE流</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-27 13:25:00" datetime="2017-08-27T05:25:00.000Z" itemprop="datePublished">2017-08-27</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2017/">2017</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h1><p>最近项目上有一个需求需要大量的将Java对象进行序列化并且进行还原，本文将介绍如何将Java对象序列化为Byte。</p>
+<h1 id="构造可序列化对象"><a href="#构造可序列化对象" class="headerlink" title="构造可序列化对象"></a>构造可序列化对象</h1><p>一个Java对象可序列化的前提是这个对象可序列化（😰。。。），具体来讲就是给这个Java对象打上可序列化的标志。一般的做法是实现接口 <code>Serializable</code> ,如下面的代码，定义一个可序列化的 <code>Apple</code> 类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Apple</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> String name;</span><br><span class="line">	<span class="keyword">private</span> Color color;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">double</span> weight;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Apple</span><span class="params">(String name, Color color, <span class="keyword">double</span> weight)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>();</span><br><span class="line">		<span class="keyword">this</span>.name = name;</span><br><span class="line">		<span class="keyword">this</span>.color = color;</span><br><span class="line">		<span class="keyword">this</span>.weight = weight;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"Apple [name="</span> + name + <span class="string">", color="</span> + color + <span class="string">", weight="</span> + weight + <span class="string">"]"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中：</p>
+<ul>
+<li><p><code>Serializable</code> 接口是一个空接口，不需要实现任何的方法。其定义如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>静态常量 <code>serialVersionUID</code> 用来验证版本的一致性。当对 <code>Byte</code> 流进行反序列化时，Java虚拟机会比对<code>Byte</code>流中的 <code>serialVersionUID</code> 是否和本地相应的实体类中的 <code>serialVersionUID</code>，如果不一致则会抛出异常。</p>
+</li>
+<li>可序列化Java对象的成员也必须是可序列化的。</li>
+</ul>
+<h1 id="序列化Java对象"><a href="#序列化Java对象" class="headerlink" title="序列化Java对象"></a>序列化Java对象</h1><p>将Java对象进行序列化的代码如下所示：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] object2Byte(Object object) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line"></span><br><span class="line">  ByteArrayOutputStream bos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">  ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(bos);</span><br><span class="line">  oos.writeObject(object);</span><br><span class="line">  <span class="keyword">byte</span>[] bytes = bos.toByteArray();</span><br><span class="line">  oos.close();</span><br><span class="line">  bos.close();</span><br><span class="line">  <span class="keyword">return</span> bytes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中：</p>
+<ul>
+<li><code>ByteArrayOutputStream</code> 用于将数据转化为字节数组。</li>
+<li><code>ObjectOutputStream</code> 用于将Java对象写入输出流。</li>
+</ul>
+<h1 id="反序列化Java对象"><a href="#反序列化Java对象" class="headerlink" title="反序列化Java对象"></a>反序列化Java对象</h1><p>将字节流反序列的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Object <span class="title">byte2Object</span><span class="params">(<span class="keyword">byte</span>[] bytes)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> ClassNotFoundException, IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">  ByteArrayInputStream bis = <span class="keyword">new</span> ByteArrayInputStream(bytes);</span><br><span class="line">  ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(bis);</span><br><span class="line">  Object object = ois.readObject();</span><br><span class="line">  ois.close();</span><br><span class="line">  bis.close();</span><br><span class="line">  <span class="keyword">return</span> object;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中：</p>
+<ul>
+<li><code>ByteArrayInputStream</code> 用于将字节数组读入输入流。</li>
+<li><code>ObjectInputStream</code> 用于将Java对象从输入流中读出。</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <footer>
+        <div class="author" align="right">
+            <a href="http://www.shifeiqi.top">
+                    凌云
+            </a>
+        </div>
+        <br>
+        Published under 
+        <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+            (CC) BY-NC-SA
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BYTE/">BYTE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/对象/">对象</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/序列化/">序列化</a></li></ul>
+
+
+            <!-- 
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/&title=《JAVA对象序列化之BYTE流》 — 韶华易逝，莫回头&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/&title=《JAVA对象序列化之BYTE流》 — 韶华易逝，莫回头&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JAVA对象序列化之BYTE流》 — 韶华易逝，莫回头&url=http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+ -->
+
+        </div>
+    </div>
+
+    <!-- 
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/10/2017-09-10-记英剧《黑镜》/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">记英剧《黑镜》</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/26/2017-08-26-CORS 浏览器跨域请求/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">CORS 浏览器跨域请求</h4>
+      </a>
+    </div>
+  
+</nav>
+
+ -->
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div> -->
+    <div class="bottom">
+        <p><span>凌云 &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/&title=《JAVA对象序列化之BYTE流》 — 韶华易逝，莫回头&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/&title=《JAVA对象序列化之BYTE流》 — 韶华易逝，莫回头&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JAVA对象序列化之BYTE流》 — 韶华易逝，莫回头&url=http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2017/08/27/2017-08-29-JAVA对象序列化之BYTE流/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACn0lEQVR42u3aQW7dMAwE0Nz/0um2QBt3hpScoHhefRh1zOeFqI748RFfn79dz3eS3/s7hy88PDy8Rel/Xu0L7sGe739ZIR4eHt41Xl5osvY+309aTvKXn2vGw8PD+zm82da5heHh4eH9T7z2EySwWcPAw8PD+15eEkbUQUD8ltm2+3DWgoeHhzepYRjOvv/7yvkeHh4e3vpUvT0Mmx2SPd/Pm8FfqsXDw8O7wMsX3Nkm+PnZnD2rEw8PD+8GL48AZlHvPiDeBB94eHh4b/Jmy31ebrKNnkXDw1fi4eHhjXjt65/B7dFavegHb8fDw8O7x2sfzp+atZZZDBE9hoeHh7fmtVvVfYgw+wSntvV4eHh4e94sop3FCqe+fRF24OHh4V3g5cv6ZoAg/zebACLaoOPh4eEd4s0C3DykmEXD+ejAP5oKHh4e3lHeqdCh/QRtkDH76Hh4eHg3ePkhU/shomjg9tAVHh4e3jXeZrGeRbdJuZsNNx4eHt6bvCTAHb7m0FN1k8DDw8M7ymtD0jYy2Awf5J/4y994eHh413j7gjZ9qW1LRfPAw8PDu8ZLysrj1yS0Tf5mHmHUMxF4eHh4h3j5xnq/Oc6bR95IoskIPDw8vDWv3ezmx1Gzwawbx294eHh493jJf/vzUCAfq2pHqfI2g4eHh3ebt2kJ+Z16rmEUAePh4eG9ycsD1lkEnOOLpf859sXDw8M7yvssrxy8D4U3G3o8PDy8e7x22a0fGx2YbYYJZhXi4eHhtbx2KW+HCdpRgH3EjIeHh/cOr12UZzFu2xgONDA8PDy8H8bbbMc3IwIvNQY8PDy8Q7yWtBnPaiPj6BQODw8P7xAvjwz2Bd2o4UDWgoeHh9et0sUhVrKp3SzxeQ37wzk8PDy8kvcLZoBK3y9jZPwAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '凌云';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '凌云';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

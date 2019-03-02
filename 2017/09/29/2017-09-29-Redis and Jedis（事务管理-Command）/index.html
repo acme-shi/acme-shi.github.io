@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Redis and Jedis（事务管理-Command） | 韶华易逝，莫回头</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Redis,Jedis,NoSql,内存数据库,Key-Value,Command">
+    <meta name="description" content="Command介绍从官方文档中可以看到，Redis关于事务管理方面的命令一共5个，各个命令及所代表的含义如下：  MULTI：标志着事务的开始，从MULTI开始到EXEC（或者DISCARD）之间的命令会被Redis服务器作为原子操作执行。返回值为OK。 EXEC: 事务提交执行，和MULTI成对出现。 DISCARD: 事务回滚，和MULTI成对出现。返回值为OK。 WATCH key[key.">
+<meta name="keywords" content="Redis,Jedis,NoSql,内存数据库,Key-Value,Command">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis and Jedis（事务管理-Command）">
+<meta property="og:url" content="http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/index.html">
+<meta property="og:site_name" content="韶华易逝，莫回头">
+<meta property="og:description" content="Command介绍从官方文档中可以看到，Redis关于事务管理方面的命令一共5个，各个命令及所代表的含义如下：  MULTI：标志着事务的开始，从MULTI开始到EXEC（或者DISCARD）之间的命令会被Redis服务器作为原子操作执行。返回值为OK。 EXEC: 事务提交执行，和MULTI成对出现。 DISCARD: 事务回滚，和MULTI成对出现。返回值为OK。 WATCH key[key.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-01T14:07:05.986Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis and Jedis（事务管理-Command）">
+<meta name="twitter:description" content="Command介绍从官方文档中可以看到，Redis关于事务管理方面的命令一共5个，各个命令及所代表的含义如下：  MULTI：标志着事务的开始，从MULTI开始到EXEC（或者DISCARD）之间的命令会被Redis服务器作为原子操作执行。返回值为OK。 EXEC: 事务提交执行，和MULTI成对出现。 DISCARD: 事务回滚，和MULTI成对出现。返回值为OK。 WATCH key[key.">
+    
+        <link rel="alternate" type="application/atom+xml" title="韶华易逝，莫回头" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">凌云</h5>
+          <a href="mailto:feiqishi@foxmail.com" title="feiqishi@foxmail.com" class="mail">feiqishi@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                博文
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom">
+                <i class="icon icon-lg icon-link"></i>
+                关于我
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Redis and Jedis（事务管理-Command）</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Redis and Jedis（事务管理-Command）</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-29T08:27:30.000Z" itemprop="datePublished" class="page-time">
+  2017-09-29
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2017/">2017</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Command介绍"><span class="post-toc-number">1.</span> <span class="post-toc-text">Command介绍</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Command操作"><span class="post-toc-number">2.</span> <span class="post-toc-text">Command操作</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#参考文献"><span class="post-toc-number">3.</span> <span class="post-toc-text">参考文献</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2017-09-29-Redis and Jedis（事务管理-Command）" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Redis and Jedis（事务管理-Command）</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-29 16:27:30" datetime="2017-09-29T08:27:30.000Z" itemprop="datePublished">2017-09-29</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2017/">2017</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Command介绍"><a href="#Command介绍" class="headerlink" title="Command介绍"></a>Command介绍</h1><p>从<a href="https://redis.io/commands#transactions" target="_blank" rel="noopener">官方文档</a>中可以看到，Redis关于事务管理方面的命令一共5个，各个命令及所代表的含义如下：</p>
+<ol>
+<li><code>MULTI</code>：标志着事务的开始，从<code>MULTI</code>开始到<code>EXEC</code>（或者<code>DISCARD</code>）之间的命令会被Redis服务器作为原子操作执行。返回值为<code>OK</code>。</li>
+<li><code>EXEC</code>: 事务提交执行，和<code>MULTI</code>成对出现。</li>
+<li><code>DISCARD</code>: 事务回滚，和<code>MULTI</code>成对出现。返回值为<code>OK</code>。</li>
+<li><code>WATCH key[key...]</code>:监视一个（多个）key，从<code>WATCH</code>命令执行结束到<code>MULTI</code>命令执行开始的时间段中，如果这些key被其他客户端改动，事务将被打断以致执行失败。</li>
+<li><code>UNWATCH</code>: 取消<code>WATCH</code>所标志的所有的key的监视。</li>
+</ol>
+<h1 id="Command操作"><a href="#Command操作" class="headerlink" title="Command操作"></a>Command操作</h1><ul>
+<li>事务提交</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MULTI #开启事务</span><br><span class="line">SET KEY "VALUE"#操作Redis</span><br><span class="line">EXEC #提交事务</span><br></pre></td></tr></table></figure>
+<ul>
+<li>事务回滚</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MULTI #开启事务</span><br><span class="line">SET KEY "VALUE"#操作Redis</span><br><span class="line">DISCARD #回滚事务</span><br></pre></td></tr></table></figure>
+<ul>
+<li>监视keys</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">WATCH appleKey #监视一个名为appleKey的key</span><br><span class="line"><span class="meta">#</span>从当前时间开始到 MULTI 命令被执行的时间里如果有其他的客户端对appleKey进行修改，则下面的事务将会被打断#</span><br><span class="line"></span><br><span class="line">MULTI #开启事务</span><br><span class="line">SET appleKey "VALUE"#操作Redis</span><br><span class="line">EXEC #提交事务，如果事务被打断将返回 nil</span><br></pre></td></tr></table></figure>
+<ul>
+<li>取消keys监视</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">WATCH appleKey androidKey #监视一个名为appleKey的key</span><br><span class="line">UNWATCH #取消对appleKey和androidKey的监视</span><br><span class="line"><span class="meta">#</span>从当前时间开始到 MULTI 命令被执行的时间段中，其他客户端对appleKey或者androidKey的操作将不会影响事务的执行#</span><br><span class="line"></span><br><span class="line">MULTI #开启事务</span><br><span class="line">SET appleKey "VALUE"#操作Redis</span><br><span class="line">EXEC #提交事务</span><br></pre></td></tr></table></figure>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a href="https://redis.io/commands#transactions" target="_blank" rel="noopener">Redis官方文档</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <footer>
+        <div class="author" align="right">
+            <a href="http://www.shifeiqi.top">
+                    凌云
+            </a>
+        </div>
+        <br>
+        Published under 
+        <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+            (CC) BY-NC-SA
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Command/">Command</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jedis/">Jedis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Key-Value/">Key-Value</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NoSql/">NoSql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存数据库/">内存数据库</a></li></ul>
+
+
+            <!-- 
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/&title=《Redis and Jedis（事务管理-Command）》 — 韶华易逝，莫回头&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/&title=《Redis and Jedis（事务管理-Command）》 — 韶华易逝，莫回头&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Redis and Jedis（事务管理-Command）》 — 韶华易逝，莫回头&url=http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+ -->
+
+        </div>
+    </div>
+
+    <!-- 
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Java）/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Redis and Jedis（事务管理-Java）</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/10/2017-09-10-记英剧《黑镜》/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">记英剧《黑镜》</h4>
+      </a>
+    </div>
+  
+</nav>
+
+ -->
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div> -->
+    <div class="bottom">
+        <p><span>凌云 &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/&title=《Redis and Jedis（事务管理-Command）》 — 韶华易逝，莫回头&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/&title=《Redis and Jedis（事务管理-Command）》 — 韶华易逝，莫回头&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Redis and Jedis（事务管理-Command）》 — 韶华易逝，莫回头&url=http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2017/09/29/2017-09-29-Redis and Jedis（事务管理-Command）/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADNElEQVR42u3a22rrMBAF0P7/T+e8Fnri7j1SwVaWn4IJkpYKnczl6yt+Xt+e5Dvfv3n9+eea79bJV9j2YGNjYz+E/bp83m2QHzf5PGNfX8T1OtjY2Njnsd9tnyATdn6VbYjKrxIbGxsbO0kh8qPMUpp8X2xsbGzs9cJQ8mZWqMoTJGxsbOzPYSdFpfYos2bA9XW0Z9tQS8PGxsa+PTtPD+7/+U/629jY2Ng3Zr/KJ0khkvbASmGoDYH/2RcbGxv7IHYeANaThHa1dlQoPz82Njb2Sex8KCcZrGmP3oa6tjz09pvY2NjYR7Pbn/vFZqN0IglaeZh8G8CwsbGxj2DPfvongW1WVGrLWEUShY2NjX0cO0828mRgpcTfBtT8/TDHwsbGxr4xe9c0y/UGedowC0jrzQNsbGzs57LzAJAEvLYl3LYE2iAaNXqxsbGxH87OA8besZtZYGt5v5wNGxsb+yB2O4iTh6i2kbDeVKiHirCxsbEPYucHmoWx9TLTrC2xIYxhY2Nj3569q4nbJgm7rnUYxrCxsbGPYOdDkHkRvw05s91XUhpsbGzsk9j5EdvxnfVWbhL2CuR13MbGxsY+gj0r+uRhZqWFnOOL5AobGxv7CPaulmpe0G+vJm9gFDtiY2NjH81ut2kbtL+kB3H6MQuT2NjY2Gezv0bPLJy0QzkrBa/o0NjY2NgPZ8/eLDVZy0bv+qgQNjY29qnsWTFo/c2u5vHSmtjY2NgHsdsANisAtcnMyjr1CtjY2NgHsZPf6slBd13oLM1o98LGxsZ+OjsfeWkvpU1pZoNBw1YHNjY29qHsNjC0ASwv968UlaKWNjY2NvZx7DZhmAWn9QbAtmYzNjY29sewrzdLts8POrvu4fgONjY29hHsV/m0F9E2butRm1mLFxsbG/sgdvuvvw1Rs5bDLDQmDYMaj42Njf0Q9npqMbuINjlZaVRjY2NjfwI7b98mP/3zN1Epf5RaRAEMGxsb+yPZ7WBNUpZKVmj/MMXIDjY2NvaHsWf1qrbNkIelpJuNjY2N/QnspNDTNoP/Iglpr2NDLQ0bGxv79uxibLE86MogzqwZMEtpsLGxsR/L/gd47EoV2MxFXwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '凌云';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '凌云';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

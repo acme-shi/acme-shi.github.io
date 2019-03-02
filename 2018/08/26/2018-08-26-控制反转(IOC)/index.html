@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>控制反转(IOC) | 韶华易逝，莫回头</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JAVA,控制反转,IOC">
+    <meta name="description" content="写在前面后端应用程序架构开发中，Spring是一个不得不迈过去的门槛。而对于学习和使用Spring，IOC又是一个不得不迈过去的门槛。   在此先简单解释一下什么是依赖：  依赖是什么？这里所解释的依赖是一个泛化的概念，即表示一个类依赖于另外一个类的定义。依赖对应Java类中的成员变量，局部变量，参数等等。对应的软件工程中的类图如下：">
+<meta name="keywords" content="JAVA,控制反转,IOC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="控制反转(IOC)">
+<meta property="og:url" content="http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/index.html">
+<meta property="og:site_name" content="韶华易逝，莫回头">
+<meta property="og:description" content="写在前面后端应用程序架构开发中，Spring是一个不得不迈过去的门槛。而对于学习和使用Spring，IOC又是一个不得不迈过去的门槛。   在此先简单解释一下什么是依赖：  依赖是什么？这里所解释的依赖是一个泛化的概念，即表示一个类依赖于另外一个类的定义。依赖对应Java类中的成员变量，局部变量，参数等等。对应的软件工程中的类图如下：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.shifeiqi.top/medias/images/code/ioc/dependency-example.png">
+<meta property="og:image" content="http://www.shifeiqi.top/medias/images/code/ioc/dependency-normal.png">
+<meta property="og:image" content="http://www.shifeiqi.top/medias/images/code/ioc/ioc-normal.png">
+<meta property="og:updated_time" content="2019-03-01T14:07:06.002Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="控制反转(IOC)">
+<meta name="twitter:description" content="写在前面后端应用程序架构开发中，Spring是一个不得不迈过去的门槛。而对于学习和使用Spring，IOC又是一个不得不迈过去的门槛。   在此先简单解释一下什么是依赖：  依赖是什么？这里所解释的依赖是一个泛化的概念，即表示一个类依赖于另外一个类的定义。依赖对应Java类中的成员变量，局部变量，参数等等。对应的软件工程中的类图如下：">
+<meta name="twitter:image" content="http://www.shifeiqi.top/medias/images/code/ioc/dependency-example.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="韶华易逝，莫回头" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">凌云</h5>
+          <a href="mailto:feiqishi@foxmail.com" title="feiqishi@foxmail.com" class="mail">feiqishi@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                博文
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom">
+                <i class="icon icon-lg icon-link"></i>
+                关于我
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">控制反转(IOC)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">控制反转(IOC)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-08-26T06:28:00.000Z" itemprop="datePublished" class="page-time">
+  2018-08-26
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2018/">2018</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#写在前面"><span class="post-toc-number">1.</span> <span class="post-toc-text">写在前面</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#无IOC架构"><span class="post-toc-number">2.</span> <span class="post-toc-text">无IOC架构</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#IOC架构"><span class="post-toc-number">3.</span> <span class="post-toc-text">IOC架构</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#参考资料"><span class="post-toc-number">4.</span> <span class="post-toc-text">参考资料</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-08-26-控制反转(IOC)" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">控制反转(IOC)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-08-26 14:28:00" datetime="2018-08-26T06:28:00.000Z" itemprop="datePublished">2018-08-26</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2018/">2018</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h1><p>后端应用程序架构开发中，Spring是一个不得不迈过去的门槛。而对于学习和使用Spring，IOC又是一个不得不迈过去的门槛。  </p>
+<p>在此先简单解释一下什么是依赖：</p>
+<ul>
+<li>依赖是什么？<br>这里所解释的依赖是一个泛化的概念，即表示一个类依赖于另外一个类的定义。依赖对应Java类中的成员变量，局部变量，参数等等。对应的软件工程中的类图如下：<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/medias/images/code/ioc/dependency-example.png" alt="dependency-example" title>
+                </div>
+                <div class="image-caption">dependency-example</div>
+            </figure>
+其中一个比较常见的实现：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">    <span class="comment">// B称之为A的依赖</span></span><br><span class="line">    <span class="keyword">private</span> B b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="无IOC架构"><a href="#无IOC架构" class="headerlink" title="无IOC架构"></a>无IOC架构</h1><p>现在假设我们要从头开始架构一个应用系统App，因为业务需要使用了底层框架组件A(三方jar或者底层框架模块)，那么一个比较常见的架构如下图所示：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/medias/images/code/ioc/dependency-normal.png" alt="dependency-normal" title>
+                </div>
+                <div class="image-caption">dependency-normal</div>
+            </figure>
+<p>由上图可以看出，App不仅依赖组件接口A，而且接口A的实现AImpl由应用程序创建。根据该架构图完成的编码如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// A接口，为组件制定规范</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 具体实现类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AImpl</span> <span class="keyword">implements</span> <span class="title">A</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 应用程序</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> A a;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">App</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        a = <span class="keyword">new</span> AImpl();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在考虑这么两种情况：</p>
+<ol>
+<li>在开发过程中发现组件的实现AImpl不能满足现有的业务需求，需要将其换成A的另一个实现类AImplForNormal。</li>
+<li>该系统需要在山东和山西地区同时上线，但是根据需求需要在山东使用组件A的实现类AImplForSD，在山西需要使用组件的实现类AImplForSX。    </li>
+</ol>
+<p>解决第一种情况的最笨办法就是将应用程序App中所有关于A的创建语句更改为<code>A a = new AImplForNormal();</code>，但是如果这样的语句有成千上万条，这必然不是一个好方法。<br>解决第二种情况大约有这么两种笨方法: 在组件A的赋值语句中添加地区判断，或者为山东和山西地区写两套App系统代码，但这无疑都是馊主意。</p>
+<p>其实上述两个问题归根结底只是一个问题：<em>如何动态地创建App所依赖的 组件A的子类。即如何在应用程序运行期间选择性地去创建组件依赖对象，让被依赖对象能够像插件一样根据配置来进行插拔处理。</em></p>
+<h1 id="IOC架构"><a href="#IOC架构" class="headerlink" title="IOC架构"></a>IOC架构</h1><p>现在我们根据引入IOC，来重新架构应用系统App。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/medias/images/code/ioc/ioc-normal.png" alt="ioc-normal" title>
+                </div>
+                <div class="image-caption">ioc-normal</div>
+            </figure>
+<p>可以看出，应用程序仅仅依赖接口和IOC容器，而组件接口A的实现类由IOC容器根据配置有选择地创建。根据该架构完成的编码如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// A接口，为组件制定规范</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A</span> </span>&#123;&#125;</span><br><span class="line"><span class="comment">// 具体实现类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AImpl</span> <span class="keyword">implements</span> <span class="title">A</span></span>&#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AImplForNormal</span> <span class="keyword">implements</span> <span class="title">A</span></span>&#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AImplForSD</span> <span class="keyword">implements</span> <span class="title">A</span></span>&#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AImplForSX</span> <span class="keyword">implements</span> <span class="title">A</span></span>&#123;&#125;</span><br><span class="line"><span class="comment">// IOC容器类</span></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IOCContainer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> A <span class="title">getA</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 读取应用程序配置文件,假设读取到的配置信息是 com.cloudups.AImplForNormal</span></span><br><span class="line">        String className = <span class="string">"com.cloudups.AImplForNormal"</span>;</span><br><span class="line">        <span class="keyword">return</span> (A) Class.forName(className).newInstance();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 应用程序</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> A a;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">App</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            a = IOCContainer.getA();</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由上述编码和架构图可以看出，组件接口A的实例对象可以由IOC容器在程序运行过程中根据配置文件有选择地进行创建，所以对于上文中的第一个问题，在开发过程中在配置文件中配置A的实现类<code>AImplFornormal</code>即可；而对于第二个问题，则在山东地区部署的时候修改配置文件中A的实现类为<code>AImplForSD</code>，在山西部署的时候修改配置文件中A的实现类为<code>AImplForSX</code>即可。  </p>
+<p>引入IOC容器之后的架构模式可以解决一个很棘手的问题：在程序运行期间根据配置有选择地创建组件的子对象。<code>即将对象的创建权交给容器&lt;框架&gt;来完成，而不是由应用程序来创建对象。这就是所谓的控制反转&lt;IOC&gt;。`</code></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a href="https://martinfowler.com/articles/injection.html" target="_blank" rel="noopener">Inversion of Control Containers and the Dependency Injection pattern</a></li>
+<li><a href="/medias/doc/ioc/IOC容器和DI模式.zip">控制反转和依赖注入-中文翻译</a></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <footer>
+        <div class="author" align="right">
+            <a href="http://www.shifeiqi.top">
+                    凌云
+            </a>
+        </div>
+        <br>
+        Published under 
+        <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+            (CC) BY-NC-SA
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IOC/">IOC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/控制反转/">控制反转</a></li></ul>
+
+
+            <!-- 
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/&title=《控制反转(IOC)》 — 韶华易逝，莫回头&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/&title=《控制反转(IOC)》 — 韶华易逝，莫回头&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《控制反转(IOC)》 — 韶华易逝，莫回头&url=http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+ -->
+
+        </div>
+    </div>
+
+    <!-- 
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/10/16/2018-10-16-代理模式/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">代理模式</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/08/21/2018-08-21-Java-for-each-基础/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java-for-each-基础</h4>
+      </a>
+    </div>
+  
+</nav>
+
+ -->
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div> -->
+    <div class="bottom">
+        <p><span>凌云 &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/&title=《控制反转(IOC)》 — 韶华易逝，莫回头&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/&title=《控制反转(IOC)》 — 韶华易逝，莫回头&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《控制反转(IOC)》 — 韶华易逝，莫回头&url=http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2018/08/26/2018-08-26-控制反转(IOC)/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACr0lEQVR42u3aQW7jMBAEQP//09nrHtZK9wxpeIHiyTAciaUAJNUzr1c8fv4a775vx+wKrxsDDw8PbzH1fBJ/f//8+d0Den5k+d/+8gjw8PDwrvHerajJb56X7GdSAm7ng4eHh/edvOSbDTXfkPDw8PD+L95+ic/jDzw8PLxv4yVhxH5ys1jhQ1kLHh4e3oUq0vd8vlLfw8PDw1tX1fMFt12Uk1D4QJMBHh4e3gXe7IjcBg3tYT0JPooHjYeHh3eBl7zwJ+BZ2WxW+moLaXh4eHineM+33086v3J7lI+2Cjw8PLxrvPbG+W1mE50FH2/fFfDw8PCO8mZxQHL7WX1qHxBHOxIeHh7eoV6j9lV/dkSexbLJP6MII/Dw8PAu8GZhxOxB5JvTgcoeHh4e3pq3iVnbgKB9KO3j++WAjoeHh3eBdzvC2JTHnql5BIyHh4d3gzd7+X++dB5MtKNuZcDDw8Nb804dc9tjdF6lWrUm4OHh4V3gtch2A2gj2uSOeUyMh4eH90leHhbsl/JZgLuq8uHh4eEteHn0kC/E+fbQRsN1IwIeHh7eBV57oXzpbw/cs2tGxTY8PDy8a7z90p83HGzCiLwrAA8PD+8GLw9M8zaCzVE4ucuB1gE8PDy8Q01XbTibhwt1fJAXt/LjPh4eHt5R3iYC2Dda/QRjNis8PDy8z/PyI/IsekiikHarqJuu8PDw8Na8/IW/jRVORbrHCmB4eHh4I95POTYNAW0EPCu8/aNdFQ8PD+8ob1byb4+8s41nExy/2oGHh4dX8try/CyMmG1Cs20DDw8P7zO8Nmho2w7aBX22gw1bB/Dw8PAu89pNYh9zzOaGh4eH9828Nt6dNQ3ksQgeHh7eZ3htyWozoecD9CzAPRDj4uHh4XW7QL155LwZ4zAADw8P7wzvD/BuNcokDQv7AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '凌云';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '凌云';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

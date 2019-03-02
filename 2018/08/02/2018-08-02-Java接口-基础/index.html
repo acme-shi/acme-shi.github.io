@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Java接口-基础 | 韶华易逝，莫回头</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JAVA,接口,Interface">
+    <meta name="description" content="写在前面接口是Java提供的一种非常强大的特性，使用接口机制可以实现封装隔离，将外部调用与内部实现分割开来。面向接口编程 是一种极其强大的编程思想，鉴于笔者水平与经验有限，此篇文章只阐述Java中接口相关的基础内容。本篇文章组织结构如下图：    接口定义 接口定义格式Java 中使用关键字 interface 来定义接口，定义格式如下： 1// [访问权限符] interface 接口名称&amp;#1">
+<meta name="keywords" content="JAVA,接口,Interface">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java接口-基础">
+<meta property="og:url" content="http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/index.html">
+<meta property="og:site_name" content="韶华易逝，莫回头">
+<meta property="og:description" content="写在前面接口是Java提供的一种非常强大的特性，使用接口机制可以实现封装隔离，将外部调用与内部实现分割开来。面向接口编程 是一种极其强大的编程思想，鉴于笔者水平与经验有限，此篇文章只阐述Java中接口相关的基础内容。本篇文章组织结构如下图：    接口定义 接口定义格式Java 中使用关键字 interface 来定义接口，定义格式如下： 1// [访问权限符] interface 接口名称&amp;#1">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.shifeiqi.top/medias/images/code/java-interface/interface-base-introduce.png">
+<meta property="og:updated_time" content="2019-03-01T14:07:06.002Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java接口-基础">
+<meta name="twitter:description" content="写在前面接口是Java提供的一种非常强大的特性，使用接口机制可以实现封装隔离，将外部调用与内部实现分割开来。面向接口编程 是一种极其强大的编程思想，鉴于笔者水平与经验有限，此篇文章只阐述Java中接口相关的基础内容。本篇文章组织结构如下图：    接口定义 接口定义格式Java 中使用关键字 interface 来定义接口，定义格式如下： 1// [访问权限符] interface 接口名称&amp;#1">
+<meta name="twitter:image" content="http://www.shifeiqi.top/medias/images/code/java-interface/interface-base-introduce.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="韶华易逝，莫回头" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">凌云</h5>
+          <a href="mailto:feiqishi@foxmail.com" title="feiqishi@foxmail.com" class="mail">feiqishi@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                博文
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom">
+                <i class="icon icon-lg icon-link"></i>
+                关于我
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java接口-基础</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java接口-基础</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-08-02T01:47:10.000Z" itemprop="datePublished" class="page-time">
+  2018-08-02
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2018/">2018</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#写在前面"><span class="post-toc-number">1.</span> <span class="post-toc-text">写在前面</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#接口定义"><span class="post-toc-number">2.</span> <span class="post-toc-text">接口定义</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#接口方法定义"><span class="post-toc-number">3.</span> <span class="post-toc-text">接口方法定义</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#接口属性定义"><span class="post-toc-number">4.</span> <span class="post-toc-text">接口属性定义</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#接口继承"><span class="post-toc-number">5.</span> <span class="post-toc-text">接口继承</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#参考资料"><span class="post-toc-number">6.</span> <span class="post-toc-text">参考资料</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-08-02-Java接口-基础" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java接口-基础</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-08-02 09:47:10" datetime="2018-08-02T01:47:10.000Z" itemprop="datePublished">2018-08-02</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2018/">2018</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h1><p>接口是Java提供的一种非常强大的特性，使用接口机制可以实现封装隔离，将外部调用与内部实现分割开来。<br><em>面向接口编程</em> 是一种极其强大的编程思想，鉴于笔者水平与经验有限，此篇文章只阐述Java中接口相关的基础内容。<br>本篇文章组织结构如下图：  </p>
+<p><img src="/medias/images/code/java-interface/interface-base-introduce.png" alt="接口基础组织结构"></p>
+<h1 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h1><ul>
+<li><p>接口定义格式<br>Java 中使用关键字 <code>interface</code> 来定义接口，定义格式如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [访问权限符] interface 接口名称&#123;&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接口定义<br>定义一个接口IPerson, 内容为空，如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IPerson</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="接口方法定义"><a href="#接口方法定义" class="headerlink" title="接口方法定义"></a>接口方法定义</h1><ul>
+<li>接口方法定义注意  <ol>
+<li>接口方法默认访问权限是 <code>public</code> ，且只能是 <code>public</code>。  </li>
+<li>接口方法只能是实例方法，不能用关键字 <code>static</code> 、<code>final</code> 修饰。（不然子类怎么重写接口方法？）。  </li>
+<li>接口方法是抽象方法，只能定义，不能实现（即不能有方法体）。  </li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><p>接口方法定义格式  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [public] 返回值类型 方法名([参数类型 arg1, 参数类型 arg2 ...]);</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接口方法定义示例<br>定义一个接口 <em>IPerson</em> ，具备接口方法 <em>say</em> 和 <em>run</em> , 如下：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IPerson</span> </span>&#123;</span><br><span class="line">      <span class="comment">// 第一种形式，显示声明方法访问权限</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">()</span></span>;</span><br><span class="line">      <span class="comment">// 第二种形式，使用隐式的方法访问权限 public</span></span><br><span class="line">      <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="接口属性定义"><a href="#接口属性定义" class="headerlink" title="接口属性定义"></a>接口属性定义</h1><ul>
+<li>接口属性定义注意<ol>
+<li>接口属性只能被定义为 <code>公有静态常量</code> , 即 <code>public static final</code>。</li>
+</ol>
+</li>
+<li><p>接口属性定义格式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [public] [static] [final] 属性类型 属性名称 = 初始值 ;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接口属性定义示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IPerson</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 显示声明属性修饰符</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String race = <span class="string">"human"</span>;</span><br><span class="line">    <span class="comment">// 使用隐式的属性修饰符 public static final</span></span><br><span class="line">    String where = <span class="string">"earth"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="接口继承"><a href="#接口继承" class="headerlink" title="接口继承"></a>接口继承</h1><ul>
+<li><p>Java 可以通过继承来扩展接口，其一般的继承格式如下:  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [访问权限符] interface 接口名称 [extends 父接口1 [, 父接口1, 父接口3 ...]] &#123;&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>一个示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IPerson</span> </span>&#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IYPerson</span> <span class="keyword">extends</span>  <span class="title">IPerson</span>, <span class="title">Serializable</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a href="https://book.douban.com/subject/2130190/" target="_blank" rel="noopener">Java编程思想</a></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <footer>
+        <div class="author" align="right">
+            <a href="http://www.shifeiqi.top">
+                    凌云
+            </a>
+        </div>
+        <br>
+        Published under 
+        <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+            (CC) BY-NC-SA
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Interface/">Interface</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/接口/">接口</a></li></ul>
+
+
+            <!-- 
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/&title=《Java接口-基础》 — 韶华易逝，莫回头&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/&title=《Java接口-基础》 — 韶华易逝，莫回头&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java接口-基础》 — 韶华易逝，莫回头&url=http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+ -->
+
+        </div>
+    </div>
+
+    <!-- 
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/08/08/2018-08-08-Java四种引用方式/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Java四种引用方式</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/08/01/2018-08-01-设计模式-单例模式/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">设计模式-单例模式</h4>
+      </a>
+    </div>
+  
+</nav>
+
+ -->
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div> -->
+    <div class="bottom">
+        <p><span>凌云 &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/&title=《Java接口-基础》 — 韶华易逝，莫回头&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/&title=《Java接口-基础》 — 韶华易逝，莫回头&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java接口-基础》 — 韶华易逝，莫回头&url=http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2018/08/02/2018-08-02-Java接口-基础/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACu0lEQVR42u3a0Y7bMAwEwPz/T7dAn4reJd4lreQKjJ+MxBY0CiAxJB+P+Pr15/p6//WZv69nn+fffn3mceLCw8PDG009mcQz8H7kHNm+hYeHh3eOlxwGr7fsfFvPN/p8uZ9+joeHh/dRXh7mtpt7Hqzj4eHh/V+82XRn724SInh4eHjv4eUpgzwlMdvo8/ubcy14eHh4MW9TAPvU/Zvqe3h4eHhlgSrZcGfFqjzZsZotHh4e3gFe2xYway/YpICTkPri2MDDw8O7lTcbaFPQKtKvZXj9zbd4eHh4B3htYSlJ724aAmbH0sWPgYeHh3eAl2NOF7dmQTkeHh7eZ3lt6LwpUG3SxDfU8fDw8PDe2DTweloz8CaRsVoIPDw8vJI3S93OQupZiqFdxG86I/Dw8PAO8NoUbZvAbRMKbRB/0W6Fh4eHd4C3CWFnIfJsu8//H1yce3h4eHhr3qYtYH8k5Itb/xh4eHh4x3izwlgS2raTbvPNFyU0PDw8vGO8NgExK3e1zVj5rJ6OhoeHh3eAt3k5n+hsIdpkbvS/AQ8PD2/NmyUgNp/kbQebMetzDw8PD2/Ba1MSbfnqrmas6KjAw8PDO8Zrt+a7At+2gaD+A4CHh4d3mNeGvJsDYBZe4+Hh4f0cXtsgtZlEMtomlC9yG3h4eHgL3mwrb5/Jg/XbmhLw8PDwTvU71cnZtiXr3vGTRVzlnvHw8PBe8pJEah5Ab9LBbSnu9Wwv6nt4eHh4N/Hy8Dc5TvKtvw2UizQHHh4e3gHebPNty2N3NRbkc8DDw8M7zdunWdty2qzoNWwmwMPDwzvGy0PhNkROmhJmI0chNR4eHt5HeW2KNk955ItSF9vw8PDwfhhvf7Tkz7eLiIeHh3ea1wa4eeqhPSryd6PjBA8PD+8Ab1MAyzfuduvfNF3dVt/Dw8PD+/f6DV/7kpdeis4eAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '凌云';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '凌云';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
