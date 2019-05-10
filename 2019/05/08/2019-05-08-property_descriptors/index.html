@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>属性描述符 | 凌云的个人博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#102027">
+    
+    
+    <meta name="keywords" content="ECMA,ECMAScript,JavaScript">
+    <meta name="description" content="属性描述符简介什么是属性描述符属性描述符(property descriptor)是JavaScript提供的内置对象，用来配置JavaScript对象属性，控制JavaScript对象属性的行为（如控制属性是否可配置，是否可枚举，是否可写等等）。属性描述符(property descriptor) 在JavaScript内部表现为一个JavaScript对象，具有明确的键值对。如下所示： 123">
+<meta name="keywords" content="ECMA,ECMAScript,JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="属性描述符">
+<meta property="og:url" content="http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/index.html">
+<meta property="og:site_name" content="凌云的个人博客">
+<meta property="og:description" content="属性描述符简介什么是属性描述符属性描述符(property descriptor)是JavaScript提供的内置对象，用来配置JavaScript对象属性，控制JavaScript对象属性的行为（如控制属性是否可配置，是否可枚举，是否可写等等）。属性描述符(property descriptor) 在JavaScript内部表现为一个JavaScript对象，具有明确的键值对。如下所示： 123">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-10T11:57:50.079Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="属性描述符">
+<meta name="twitter:description" content="属性描述符简介什么是属性描述符属性描述符(property descriptor)是JavaScript提供的内置对象，用来配置JavaScript对象属性，控制JavaScript对象属性的行为（如控制属性是否可配置，是否可枚举，是否可写等等）。属性描述符(property descriptor) 在JavaScript内部表现为一个JavaScript对象，具有明确的键值对。如下所示： 123">
+    
+        <link rel="alternate" type="application/atom+xml" title="凌云的个人博客" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">凌云</h5>
+          <a href="mailto:feiqishi@foxmail.com" title="feiqishi@foxmail.com" class="mail">feiqishi@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                博文
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about">
+                <i class="icon icon-lg icon-link"></i>
+                关于我
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">属性描述符</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">属性描述符</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-05-08T07:35:00.000Z" itemprop="datePublished" class="page-time">
+  2019-05-08
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2019/">2019</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#属性描述符简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">属性描述符简介</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是属性描述符"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">什么是属性描述符</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如何获取属性描述符"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">如何获取属性描述符</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#属性描述符的分类"><span class="post-toc-number">2.</span> <span class="post-toc-text">属性描述符的分类</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#数据描述符-data-descriptor"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">数据描述符(data descriptor)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#为属性定义数据描述符"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">为属性定义数据描述符</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#默认定义数据描述符"><span class="post-toc-number">2.2.1.</span> <span class="post-toc-text">默认定义数据描述符</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#自定义数据描述符"><span class="post-toc-number">2.2.2.</span> <span class="post-toc-text">自定义数据描述符</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#存取描述符-accessor-descriptor"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">存取描述符(accessor descriptor)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#为属性定义存取描述符"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">为属性定义存取描述符</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据描述符与存取描述符的异同"><span class="post-toc-number">3.</span> <span class="post-toc-text">数据描述符与存取描述符的异同</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#参考"><span class="post-toc-number">4.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2019-05-08-property_descriptors" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">属性描述符</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-05-08 15:35:00" datetime="2019-05-08T07:35:00.000Z" itemprop="datePublished">2019-05-08</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2019/">2019</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h3 id="属性描述符简介"><a href="#属性描述符简介" class="headerlink" title="属性描述符简介"></a>属性描述符简介</h3><h4 id="什么是属性描述符"><a href="#什么是属性描述符" class="headerlink" title="什么是属性描述符"></a>什么是属性描述符</h4><p>属性描述符(property descriptor)是JavaScript提供的内置对象，用来配置<em>JavaScript对象属性</em>，控制<em>JavaScript对象属性</em>的行为（如控制属性是否可配置，是否可枚举，是否可写等等）。<br>属性描述符(property descriptor) 在JavaScript内部表现为一个JavaScript对象，具有明确的键值对。如下所示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个对象 o , 具有属性 a                          // o.a 的属性描述符</span></span><br><span class="line">o : &#123;                                             <span class="comment">// 其中键名 configurable, enumerable, value, writable 是明确的，不可更改的</span></span><br><span class="line">    a : <span class="number">1</span>     &lt;---------------------------------    &#123;</span><br><span class="line">&#125;                                                       configurable ： <span class="literal">true</span>,</span><br><span class="line">                                                        enumerable : <span class="literal">true</span>,</span><br><span class="line">                                                        value : <span class="number">1</span>,</span><br><span class="line">                                                        writable : <span class="literal">true</span></span><br><span class="line">                                                    &#125;</span><br></pre></td></tr></table></figure>
+<p>详见：<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description" target="_blank" rel="noopener">Description</a></p>
+<h4 id="如何获取属性描述符"><a href="#如何获取属性描述符" class="headerlink" title="如何获取属性描述符"></a>如何获取属性描述符</h4><p>JavaScript 提供内置接口 <code>Object.getOwnPropertyDescriptor(obj, prop)</code> 用于获取对象属性的属性描述符。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'a'</span>);</span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">//   configurable: true,</span></span><br><span class="line"><span class="comment">//   enumerable: true,</span></span><br><span class="line"><span class="comment">//   value: 1,</span></span><br><span class="line"><span class="comment">//   writable: true</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>详见： <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor" target="_blank" rel="noopener">Object​.get​OwnProperty​Descriptor()
+</a></p>
+<h3 id="属性描述符的分类"><a href="#属性描述符的分类" class="headerlink" title="属性描述符的分类"></a>属性描述符的分类</h3><p>JavaScript 提供两种属性描述符：数据描述符(data descriptor)和存取描述符(accessor descriptor)。</p>
+<h4 id="数据描述符-data-descriptor"><a href="#数据描述符-data-descriptor" class="headerlink" title="数据描述符(data descriptor)"></a>数据描述符(data descriptor)</h4><p>数据描述符用来描述属性值以及属性是否可配置、可枚举、可写，数据描述符的表现形式如下:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个值为 1 的数据描述符示例</span></span><br><span class="line">&#123;</span><br><span class="line">    configurable : <span class="literal">true</span>,</span><br><span class="line">    enumerable : <span class="literal">true</span>,</span><br><span class="line">    value : <span class="number">1</span>,</span><br><span class="line">    writeable : <span class="literal">true</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中，各个键值含义如下：</p>
+<ol>
+<li><p><code>configurable</code>： 表明该属性是否可配置。属性可配置包含但不限于以下情况：  </p>
+<ul>
+<li>该属性是否可用指令<code>delete</code>删除。</li>
+<li>该属性的属性描述符是否可修改，即通过接口 <code>Object.defineProperty(obj, prop, descriptor)</code> 修改属性描述符。</li>
+</ul>
+</li>
+<li><p><code>enumerable</code>： 表明该属性是否可枚举。属性可枚举的情况包含但不限于以下：</p>
+<ul>
+<li>通过接口 <code>Object.keys(obj)</code> 遍历对象自身可枚举属性。</li>
+<li>通过接口 <code>Object.values(obj)</code> 遍历对象自身可枚举属性值。</li>
+<li>通过接口 <code>Object.entries(obj)</code> 遍历对象自身可枚举属性。</li>
+<li>通过 <code>for (variable in object) {...}</code> 遍历对象可枚举属性（自身属性与继承属性）。 </li>
+</ul>
+</li>
+<li><p><code>value</code>： 表明属性的当前值。</p>
+</li>
+<li><p><code>writable</code>：表明属性是否可写。属性可写包含但不限于以下情况：</p>
+<ul>
+<li>通过赋值语句为对象属性赋值，如 <code>o.a = 2;</code> 。</li>
+<li>通过接口 <code>Object.defineProperty(obj, prop, descriptor)</code> 修改数据描述符元属性<code>value</code>。</li>
+</ul>
+</li>
+</ol>
+<h4 id="为属性定义数据描述符"><a href="#为属性定义数据描述符" class="headerlink" title="为属性定义数据描述符"></a>为属性定义数据描述符</h4><p>为对象属性定义数据描述符有两种方式：默认定义、自定义。</p>
+<h5 id="默认定义数据描述符"><a href="#默认定义数据描述符" class="headerlink" title="默认定义数据描述符"></a>默认定义数据描述符</h5><p>通过赋值操作为对象添加属性时，JavaScript会为该属性创建一个默认的数据描述符。<br>通过这种方式创建的数据描述符的元属性value值与对象属性值保持一致，其余元属性值都为<code>true</code>，具体表现形式如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过赋值操作创建的默认数据描述符</span></span><br><span class="line"><span class="comment">// var o = &#123;&#125;;</span></span><br><span class="line"><span class="comment">// o.a = 1;</span></span><br><span class="line">&#123;</span><br><span class="line">    configurable : <span class="literal">true</span>,</span><br><span class="line">    enumerable : <span class="literal">true</span>,</span><br><span class="line">    value : <span class="number">1</span>,</span><br><span class="line">    writeable : <span class="literal">true</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>创建一个默认数据描述符的示例如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 为对象 o 添加属性 a b c</span></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span></span><br><span class="line">&#125;;</span><br><span class="line">o.b = <span class="string">'b value'</span>;</span><br><span class="line">o[<span class="string">'c'</span>] = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'a'</span>);</span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">//   configurable: true,</span></span><br><span class="line"><span class="comment">//   enumerable: true,</span></span><br><span class="line"><span class="comment">//   value: 1,</span></span><br><span class="line"><span class="comment">//   writable: true</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'b'</span>);</span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">//   configurable: true,</span></span><br><span class="line"><span class="comment">//   enumerable: true,</span></span><br><span class="line"><span class="comment">//   value: 'b value',</span></span><br><span class="line"><span class="comment">//   writable: true</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'c'</span>);</span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">//   configurable: true,</span></span><br><span class="line"><span class="comment">//   enumerable: true,</span></span><br><span class="line"><span class="comment">//   value: false,</span></span><br><span class="line"><span class="comment">//   writable: true</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="自定义数据描述符"><a href="#自定义数据描述符" class="headerlink" title="自定义数据描述符"></a>自定义数据描述符</h5><p>JavaScript 提供内置接口 <code>Object.defineProperty(obj, prop, descriptor)</code> 用于定义及修改属性描述符。<br>使用该接口创建数据描述符时，若没有指定数据描述符某个元属性值，则这个元属性会取默认值，数据描述符各元属性默认值如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    configurable : <span class="literal">false</span>,</span><br><span class="line">    enumerable : <span class="literal">false</span>,</span><br><span class="line">    value : <span class="literal">undefined</span>,</span><br><span class="line">    writeable : <span class="literal">false</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用接口 <code>Object.defineProperty(obj, prop, descriptor)</code> 定义数据描述符示例如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 定义属性 a, 并指定其为不可写属性</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123;</span><br><span class="line">  configurable : <span class="literal">true</span>,</span><br><span class="line">  enumerable : <span class="literal">true</span>,</span><br><span class="line">  value : <span class="number">1</span>,</span><br><span class="line">  writable : <span class="literal">false</span>  <span class="comment">// 不可写</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'a'</span>);  <span class="comment">// &#123;</span></span><br><span class="line">                                          <span class="comment">//   configurable: true,</span></span><br><span class="line">                                          <span class="comment">//   enumerable: true,</span></span><br><span class="line">                                          <span class="comment">//   value: 1,</span></span><br><span class="line">                                          <span class="comment">//   writable: false</span></span><br><span class="line">                                          <span class="comment">// &#125;</span></span><br><span class="line"> o.a = <span class="number">2</span>;  <span class="comment">// TypeError: Cannot assign to read only property 'a' of object '#&lt;Object&gt;'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 定义属性 b, 数据描述符元数据 value='b-value', writable=true, configurable和enumerable采用默认配置。</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'b'</span>, &#123;</span><br><span class="line">  value : <span class="string">'b-value'</span>,</span><br><span class="line">  writable : <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'b'</span>);  <span class="comment">// &#123;</span></span><br><span class="line">                                          <span class="comment">//   configurable: false,</span></span><br><span class="line">                                          <span class="comment">//   enumerable: false,</span></span><br><span class="line">                                          <span class="comment">//   value: 'b-value',</span></span><br><span class="line">                                          <span class="comment">//   writable: true</span></span><br><span class="line">                                          <span class="comment">// &#125;</span></span><br><span class="line">o.b = <span class="string">'hi, Sophia'</span>; <span class="comment">// bingo</span></span><br></pre></td></tr></table></figure></p>
+<p>使用接口 <code>Object.defineProperty(obj, prop, descriptor)</code> 修改数据描述符示例如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 定义属性 a, 并指定其为不可写属性</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123;</span><br><span class="line">  configurable : <span class="literal">true</span>,</span><br><span class="line">  enumerable : <span class="literal">true</span>,</span><br><span class="line">  value : <span class="number">1</span>,</span><br><span class="line">  writable : <span class="literal">false</span>  <span class="comment">// 不可写</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'a'</span>);  <span class="comment">// &#123;</span></span><br><span class="line">                                          <span class="comment">//   configurable: true,</span></span><br><span class="line">                                          <span class="comment">//   enumerable: true,</span></span><br><span class="line">                                          <span class="comment">//   value: 1,</span></span><br><span class="line">                                          <span class="comment">//   writable: false</span></span><br><span class="line">                                          <span class="comment">// &#125;</span></span><br><span class="line">o.a = <span class="number">2</span>;  <span class="comment">// TypeError: Cannot assign to read only property 'a' of object '#&lt;Object&gt;'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 修改属性 a 的数据描述符，使其变为可写属性</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123;</span><br><span class="line">  writable : <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'a'</span>);  <span class="comment">// &#123;</span></span><br><span class="line">                                          <span class="comment">//   configurable: true,</span></span><br><span class="line">                                          <span class="comment">//   enumerable: true,</span></span><br><span class="line">                                          <span class="comment">//   value: 1,</span></span><br><span class="line">                                          <span class="comment">//   writable: true</span></span><br><span class="line">                                          <span class="comment">// &#125;</span></span><br><span class="line">o.a = <span class="number">2</span>; <span class="comment">// bingo</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="存取描述符-accessor-descriptor"><a href="#存取描述符-accessor-descriptor" class="headerlink" title="存取描述符(accessor descriptor)"></a>存取描述符(accessor descriptor)</h4><p>存取描述符用来描述对象属性是否可配置、可枚举，以及对属性的赋值及取值过程进行控制，存取描述符的一般结构如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    configurable : <span class="literal">true</span>,</span><br><span class="line">    enumerable : <span class="literal">true</span>,</span><br><span class="line">    <span class="keyword">get</span> : function() &#123;</span><br><span class="line">        <span class="comment">// 返回值</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="keyword">set</span> : function(val) &#123;</span><br><span class="line">        <span class="comment">// 赋值之前的逻辑操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，存取描述符的各个元属性含义如下：  </p>
+<ol>
+<li><p><code>configurable</code>： 表明该属性是否可配置。属性可配置包含但不限于以下情况：  </p>
+<ul>
+<li>该属性是否可用指令<code>delete</code>删除。</li>
+<li>该属性的属性描述符是否可修改，即通过接口 <code>Object.defineProperty(obj, prop, descriptor)</code> 修改属性描述符。</li>
+</ul>
+</li>
+<li><p><code>enumerable</code>： 表明该属性是否可枚举。属性可枚举的情况包含但不限于以下：</p>
+<ul>
+<li>通过接口 <code>Object.keys(obj)</code> 遍历对象自身可枚举属性。</li>
+<li>通过接口 <code>Object.values(obj)</code> 遍历对象自身可枚举属性值。</li>
+<li>通过接口 <code>Object.entries(obj)</code> 遍历对象自身可枚举属性。</li>
+<li>通过 <code>for (variable in object) {...}</code> 遍历对象可枚举属性（自身属性与继承属性）。 </li>
+</ul>
+</li>
+<li><p><code>get</code> : 该元属性只能取值为 <code>undefined</code> 或者 <code>function</code> 类型。</p>
+<ul>
+<li>get 元属性值为 <code>undefined</code> 类型时，对象属性的取值操作返回值都是 <code>undefined</code>。</li>
+<li>get 元属性值为 <code>function</code> 类型时，对象属性的取值操作返回值是该函数的返回值。</li>
+</ul>
+</li>
+<li><p><code>set</code> : 该元属性只能取值 <code>undefined</code> 或者 <code>function</code> 类型。</p>
+<ul>
+<li>set 元属性值为 <code>undefined</code> 类型时，对象属性赋值操作等于无效，严格模式下会抛异常。</li>
+<li>set 元属性值为 <code>function</code> 类型时， 对象属性的赋值操作会调用该元属性函数。</li>
+</ul>
+</li>
+</ol>
+<h4 id="为属性定义存取描述符"><a href="#为属性定义存取描述符" class="headerlink" title="为属性定义存取描述符"></a>为属性定义存取描述符</h4><p>存取描述符只能通过接口 <code>Object.defineProperty(obj, prop, descriptor)</code> 定义及修改。<br>在定义存取描述符时可以指定少量的元属性，其余的存取描述符元属性将会采用默认值，存取描述符的元属性默认值如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  configurable: <span class="literal">false</span>,</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  <span class="keyword">set</span> : undefined,</span><br><span class="line">  <span class="keyword">get</span> : undefined</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用接口 <code>Object.defineProperty(obj, prop, descriptor)</code> 定义存取描述符的示例如下:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 为 o.a 定义存取描述符，使得 o._a 与 o.a 保持数据同步</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line">o._a = <span class="literal">undefined</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 o.a 定义存取描述符，configurable和enumerable采用默认值</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123;</span><br><span class="line">  <span class="keyword">get</span> : function() &#123;</span><br><span class="line">    <span class="keyword">return</span> o._a;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">set</span> : function(val) &#123;</span><br><span class="line">    o._a = val;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'a'</span>);  <span class="comment">// &#123;</span></span><br><span class="line">                                          <span class="comment">//   configurable: false,</span></span><br><span class="line">                                          <span class="comment">//   enumerable: false,</span></span><br><span class="line">                                          <span class="comment">//   get: [Function: get],</span></span><br><span class="line">                                          <span class="comment">//   set: [Function: set]</span></span><br><span class="line">                                          <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">o.a = <span class="number">1</span>;  <span class="comment">// o.a = 1, o._a = 1</span></span><br><span class="line">o.a;   <span class="comment">// 1</span></span><br><span class="line">o._a;  <span class="comment">// 1</span></span><br></pre></td></tr></table></figure></p>
+<p>使用接口 <code>Object.defineProperty(obj, prop, descriptor)</code> 修改存取描述符的示例如下:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 为 o.a 定义存取描述符，使得 o._a 与 o.a 保持数据同步</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line">o._a = <span class="literal">undefined</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 o.a 定义存取描述符</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123;</span><br><span class="line">  configurable : <span class="literal">true</span>,</span><br><span class="line">  enumerable : <span class="literal">true</span>,</span><br><span class="line">  <span class="keyword">get</span> : function() &#123;</span><br><span class="line">    <span class="keyword">return</span> o._a;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">set</span> : function(val) &#123;</span><br><span class="line">    o._a = val;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'a'</span>);  <span class="comment">// &#123;</span></span><br><span class="line">                                          <span class="comment">//   configurable: true,</span></span><br><span class="line">                                          <span class="comment">//   enumerable: true,</span></span><br><span class="line">                                          <span class="comment">//   get: [Function: get],</span></span><br><span class="line">                                          <span class="comment">//   set: [Function: set]</span></span><br><span class="line">                                          <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">o.a = <span class="number">1</span>;  <span class="comment">// o.a = 1, o._a = 1</span></span><br><span class="line">o.a;   <span class="comment">// 1</span></span><br><span class="line">o._a;  <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改 o.a 存取描述符， 使其变为不可枚举属性</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable : <span class="literal">false</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(o , <span class="string">'a'</span>); <span class="comment">// &#123;</span></span><br><span class="line">                                          <span class="comment">//   configurable: true,</span></span><br><span class="line">                                          <span class="comment">//   enumerable: false,</span></span><br><span class="line">                                          <span class="comment">//   get: [Function: get],</span></span><br><span class="line">                                          <span class="comment">//   set: [Function: set]</span></span><br><span class="line">                                          <span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="数据描述符与存取描述符的异同"><a href="#数据描述符与存取描述符的异同" class="headerlink" title="数据描述符与存取描述符的异同"></a>数据描述符与存取描述符的异同</h3><ul>
+<li>数据描述符和存取描述符都具有元属性 <code>configurable</code> 和 <code>enumerable</code>, 且这两个元属性在数据描述符和存取描述符中的含义一致。</li>
+<li>数据描述符的元属性集合只能是 [<code>configurable</code>， <code>enumerable</code>， <code>value</code>， <code>writable</code>]。</li>
+<li>存取描述符的元属性集合只能是 [<code>configurable</code>， <code>enumerable</code>，<code>set</code>， <code>get</code>]。</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor" target="_blank" rel="noopener">Object​.get​OwnProperty​Descriptor()</a>;</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptors" target="_blank" rel="noopener">Object​.get​OwnProperty​Descriptors()</a>;</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="noopener">Object​.define​Property()</a>;</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank" rel="noopener">Object​.keys()</a>;</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values" target="_blank" rel="noopener">Object​.values()</a>;</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries" target="_blank" rel="noopener">Object​.entries()</a>;</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in" target="_blank" rel="noopener">for…in</a>;</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <footer>
+        <div class="author" align="right">
+            <a href="http://www.shifeiqi.top">
+                    凌云
+            </a>
+        </div>
+        <br>
+        Published under 
+        <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+            (CC) BY-NC-SA
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ECMA/">ECMA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ECMAScript/">ECMAScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+
+            <!-- 
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/&title=《属性描述符》 — 凌云的个人博客&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/&title=《属性描述符》 — 凌云的个人博客&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《属性描述符》 — 凌云的个人博客&url=http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+ -->
+
+        </div>
+    </div>
+
+    <!-- 
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/03/11/2019-03-11-select-sort/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">选择排序</h4>
+      </a>
+    </div>
+  
+</nav>
+
+ -->
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div> -->
+    <div class="bottom">
+        <p><span>凌云 &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/&title=《属性描述符》 — 凌云的个人博客&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/&title=《属性描述符》 — 凌云的个人博客&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《属性描述符》 — 凌云的个人博客&url=http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2019/05/08/2019-05-08-property_descriptors/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuUlEQVR42u3cwU7rQAwF0P7/T/O2SI+2947HhcXJqoI0mTNIsWNbPB7x8fXt+P8nyc+//3Zy5cfGgYeHhzdY+nzRz76V3/EZ4/V6nn4XDw8Pb42XXK5d3OvlJtvRBgk8PDy8v8mbhIQkmZ6fiYeHh/fXeEmJIU+pk+rB2Xbj4eHhbfOS5Dgvp+bpePLoT1LtC7UWPDw8vK5G+pgs9/OfV/p7eHh4eOOuet6Uaptn8/AQXRMPDw9vgdemyG2qnZdf2+CUl4bx8PDwNnhnsHYR7RBAUjIuirl4eHh4y7x2wDRv9s+v3FLx8PDwtnn5wOhZcysJDO14a5FM4+Hh4Y15ecKa3LJNdvMwcGEgAA8PD+8Sr21QtSFksln5H+DN5uLh4eGt8fYaYHkxIg9aResLDw8P7ypvo7hwlgono1f1SvDw8PA+wmsfynkpIR9CbcNGnUzj4eHhjXntDfJgcDZiddZy++EcPDw8vAXe4XxBXKqYJ9CvA1V0Xzw8PLyrvOTFvk2Fb23WhUkAPDw8vDVem8hOxqfa+46SeDw8PLw13qTkmie7bRGhTbV/+IyHh4e3zGtHASalh3bj2mBzGLvw8PDwTrr8xT+qOxsdaB/97V3qejMeHh5eyUuS2vxybSG4vWb7LTw8PLwNXv7gbs85a1mdlY/fvBLg4eHhfYSXP9CTllUCaJthxRsDHh4e3jLvrHxwVq7NV9KWKp4GBjw8PLyrvPol/2gAa0JtG2x4eHh4G7yv8shJkxCSFzXebAoeHh7eAi8/cuTdAYJkU+r5CDw8PLwx7+yx3i4oLyjkzbaVKjUeHh5ezMtf8vMAkIwXHCbBbUzDw8PD+1XeJBGfjFglZx5WqfHw8PD+DC9fShJs8mIuHh4e3md4twoBZ0uZt+LeBAY8PDy8q7zPPNxz0oVRADw8PLwt3j8IqsU6tNLshwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '凌云';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '凌云';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
