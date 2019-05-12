@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>枚举对象属性 | 凌云的个人博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#102027">
+    
+    
+    <meta name="keywords" content="ECMA,ECMAScript,JavaScript">
+    <meta name="description" content="1. 写在前面在日常开发，尤其是类库的开发过程中，遍历对象属性是一项经常使用的操作。本文将介绍如何遍历对象自身可枚举属性、遍历对象自身全部属性、遍历对象可枚举属性、遍历对象全部属性 四方面的内容。 2. 遍历对象自身可枚举属性2.1. 使用接口 Object.keys(obj)JavaScript 提供内置接口 Object.keys(obj) 用来获取对象自身的（非继承）、可枚举的属性名称集合。">
+<meta name="keywords" content="ECMA,ECMAScript,JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="枚举对象属性">
+<meta property="og:url" content="http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/index.html">
+<meta property="og:site_name" content="凌云的个人博客">
+<meta property="og:description" content="1. 写在前面在日常开发，尤其是类库的开发过程中，遍历对象属性是一项经常使用的操作。本文将介绍如何遍历对象自身可枚举属性、遍历对象自身全部属性、遍历对象可枚举属性、遍历对象全部属性 四方面的内容。 2. 遍历对象自身可枚举属性2.1. 使用接口 Object.keys(obj)JavaScript 提供内置接口 Object.keys(obj) 用来获取对象自身的（非继承）、可枚举的属性名称集合。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-12T12:38:58.694Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="枚举对象属性">
+<meta name="twitter:description" content="1. 写在前面在日常开发，尤其是类库的开发过程中，遍历对象属性是一项经常使用的操作。本文将介绍如何遍历对象自身可枚举属性、遍历对象自身全部属性、遍历对象可枚举属性、遍历对象全部属性 四方面的内容。 2. 遍历对象自身可枚举属性2.1. 使用接口 Object.keys(obj)JavaScript 提供内置接口 Object.keys(obj) 用来获取对象自身的（非继承）、可枚举的属性名称集合。">
+    
+        <link rel="alternate" type="application/atom+xml" title="凌云的个人博客" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">凌云</h5>
+          <a href="mailto:feiqishi@foxmail.com" title="feiqishi@foxmail.com" class="mail">feiqishi@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                博文
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about">
+                <i class="icon icon-lg icon-link"></i>
+                关于我
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">枚举对象属性</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">枚举对象属性</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-05-12T09:09:00.000Z" itemprop="datePublished" class="page-time">
+  2019-05-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2019/">2019</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-写在前面"><span class="post-toc-number">1.</span> <span class="post-toc-text">1. 写在前面</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-遍历对象自身可枚举属性"><span class="post-toc-number">2.</span> <span class="post-toc-text">2. 遍历对象自身可枚举属性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-1-使用接口-Object-keys-obj"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">2.1. 使用接口 Object.keys(obj)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-2-使用接口-Object-values-obj"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">2.2. 使用接口 Object.values(obj)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-3-使用接口-Object-entries"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">2.3. 使用接口 Object.entries()</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-4-使用接口-Object-getOwnPropertyNames-obj-和-Object​-prototype​-property​IsEnumerable"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">2.4. 使用接口 Object.getOwnPropertyNames(obj) 和 Object​.prototype​.property​IsEnumerable()</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-5-使用-for-in-和-接口-Object​-prototype​-has​OwnProperty"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">2.5. 使用 for...in 和 接口 Object​.prototype​.has​OwnProperty()</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-遍历对象自身所有属性"><span class="post-toc-number">3.</span> <span class="post-toc-text">3. 遍历对象自身所有属性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-遍历对象所有可枚举属性（自身和继承）"><span class="post-toc-number">4.</span> <span class="post-toc-text">4. 遍历对象所有可枚举属性（自身和继承）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-1-使用-for-in"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">4.1. 使用 for...in</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-2-通过遍历原型链的方式"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">4.2. 通过遍历原型链的方式</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-遍历对象所有属性"><span class="post-toc-number">5.</span> <span class="post-toc-text">5. 遍历对象所有属性</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2019-05-12-enumerate_properties" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">枚举对象属性</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-05-12 17:09:00" datetime="2019-05-12T09:09:00.000Z" itemprop="datePublished">2019-05-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/2019/">2019</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h3 id="1-写在前面"><a href="#1-写在前面" class="headerlink" title="1. 写在前面"></a>1. 写在前面</h3><p>在日常开发，尤其是类库的开发过程中，遍历对象属性是一项经常使用的操作。<br>本文将介绍如何<em>遍历对象自身可枚举属性</em>、<em>遍历对象自身全部属性</em>、<em>遍历对象可枚举属性</em>、<em>遍历对象全部属性</em> 四方面的内容。</p>
+<h3 id="2-遍历对象自身可枚举属性"><a href="#2-遍历对象自身可枚举属性" class="headerlink" title="2. 遍历对象自身可枚举属性"></a>2. 遍历对象自身可枚举属性</h3><h4 id="2-1-使用接口-Object-keys-obj"><a href="#2-1-使用接口-Object-keys-obj" class="headerlink" title="2.1. 使用接口 Object.keys(obj)"></a>2.1. 使用接口 <code>Object.keys(obj)</code></h4><p>JavaScript 提供内置接口 <code>Object.keys(obj)</code> 用来获取对象自身的（非继承）、可枚举的属性名称集合。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span>,</span><br><span class="line">  b : <span class="string">'bran'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取对象自身可枚举属性，并遍历打印</span></span><br><span class="line"><span class="built_in">Object</span>.keys(o).forEach(<span class="function"><span class="params">key</span> =&gt;</span> <span class="built_in">console</span>.log(key, o[key]));</span><br></pre></td></tr></table></figure>
+<p>详见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank" rel="noopener">Object​.keys()</a> 。</p>
+<h4 id="2-2-使用接口-Object-values-obj"><a href="#2-2-使用接口-Object-values-obj" class="headerlink" title="2.2. 使用接口 Object.values(obj)"></a>2.2. 使用接口 <code>Object.values(obj)</code></h4><p>JavaScript 提供内置接口 <code>Object.values(obj)</code> 用来获取对象自身的（非继承）、可枚举的属性值集合。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span>,</span><br><span class="line">  b : <span class="string">'bran'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取对象自身可枚举属性值集合</span></span><br><span class="line"><span class="built_in">Object</span>.values(o).forEach(<span class="function"><span class="params">val</span> =&gt;</span> <span class="built_in">console</span>.log(val));</span><br></pre></td></tr></table></figure>
+<p>详见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/values" target="_blank" rel="noopener">Object​.values()</a>。</p>
+<h4 id="2-3-使用接口-Object-entries"><a href="#2-3-使用接口-Object-entries" class="headerlink" title="2.3. 使用接口 Object.entries()"></a>2.3. 使用接口 <code>Object.entries()</code></h4><p>JavaScript 提供内置接口 <code>Object.entries(obj)</code> 用来获取对象自身的（非继承）、可枚举的键值对集合。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span>,</span><br><span class="line">  b : <span class="string">'bran'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取对象自身可枚举属性的键值对集合</span></span><br><span class="line"><span class="built_in">Object</span>.entries(o).forEach(<span class="function"><span class="params">entry</span> =&gt;</span> <span class="built_in">console</span>.log(entry[<span class="number">0</span>], entry[<span class="number">1</span>]));</span><br></pre></td></tr></table></figure>
+<p>详见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/entries" target="_blank" rel="noopener">Object​.entries()</a>；</p>
+<h4 id="2-4-使用接口-Object-getOwnPropertyNames-obj-和-Object​-prototype​-property​IsEnumerable"><a href="#2-4-使用接口-Object-getOwnPropertyNames-obj-和-Object​-prototype​-property​IsEnumerable" class="headerlink" title="2.4. 使用接口 Object.getOwnPropertyNames(obj) 和 Object​.prototype​.property​IsEnumerable()"></a>2.4. 使用接口 <code>Object.getOwnPropertyNames(obj)</code> 和 <code>Object​.prototype​.property​IsEnumerable()</code></h4><p>接口 <code>Object.getOwnPropertyNames(obj)</code> 用于获取对象自身（非继承）所有的（可枚举和不可枚举）属性名称集合。<br>接口 <code>Object​.prototype​.property​IsEnumerable()</code> 用于判断对象自身（非继承）的某个属性是否为可枚举。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span>,</span><br><span class="line">  b : <span class="string">'bran'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 为对象定义一个不可枚举属性 c</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'c'</span>, &#123;</span><br><span class="line">  configurable : <span class="literal">true</span>,</span><br><span class="line">  enumerable : <span class="literal">false</span>,</span><br><span class="line">  value : <span class="string">'sophia'</span>,</span><br><span class="line">  writable : <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历对象自身所有属性</span></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyNames(o).forEach(<span class="function"><span class="params">name</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 将对象自身可枚举属性打印出来</span></span><br><span class="line">  o.propertyIsEnumerable(name) &amp;&amp; <span class="built_in">console</span>.log(name, o[name]);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>详见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames" target="_blank" rel="noopener">Object​.get​OwnProperty​Names()</a>，<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/propertyIsEnumerable" target="_blank" rel="noopener">Object​.prototype​.property​IsEnumerable()</a>。</p>
+<h4 id="2-5-使用-for-in-和-接口-Object​-prototype​-has​OwnProperty"><a href="#2-5-使用-for-in-和-接口-Object​-prototype​-has​OwnProperty" class="headerlink" title="2.5. 使用 for...in 和 接口 Object​.prototype​.has​OwnProperty()"></a>2.5. 使用 <code>for...in</code> 和 接口 <code>Object​.prototype​.has​OwnProperty()</code></h4><p><code>for...in</code> 用于遍历对象所有的（自身及继承）、可枚举的属性集合。<br>接口 <code>Object​.prototype​.has​OwnProperty()</code> 用于判断对象自身（非继承）是否拥有某个属性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span>,</span><br><span class="line">  b : <span class="string">'bran'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 为对象定义一个不可枚举属性 c</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'c'</span>, &#123;</span><br><span class="line">  configurable : <span class="literal">true</span>,</span><br><span class="line">  enumerable : <span class="literal">false</span>,</span><br><span class="line">  value : <span class="string">'sophia'</span>,</span><br><span class="line">  writable : <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> key;</span><br><span class="line"><span class="comment">// 遍历对象所有可枚举属性</span></span><br><span class="line"><span class="keyword">for</span>(key <span class="keyword">in</span> o) &#123;</span><br><span class="line">  <span class="comment">// 将对象自身的属性打印出来</span></span><br><span class="line">  o.hasOwnProperty(key) &amp;&amp; <span class="built_in">console</span>.log(key, o[key]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>详见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/for...in" target="_blank" rel="noopener">for…in</a>，<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty" target="_blank" rel="noopener">Object​.prototype​.has​OwnProperty()</a>。</p>
+<h3 id="3-遍历对象自身所有属性"><a href="#3-遍历对象自身所有属性" class="headerlink" title="3. 遍历对象自身所有属性"></a>3. 遍历对象自身所有属性</h3><p>遍历对象自身（非继承）所有属性主要使用JavaScript内置接口 <code>Object.getOwnPropertyNames(obj)</code>。<br>接口 <code>Object.getOwnPropertyNames(obj)</code> 用于获取对象自身所有的（可枚举和不可枚举）属性名称集合。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span>,</span><br><span class="line">  b : <span class="string">'bran'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 为对象定义一个不可枚举属性 c</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'c'</span>, &#123;</span><br><span class="line">  configurable : <span class="literal">true</span>,</span><br><span class="line">  enumerable : <span class="literal">false</span>,</span><br><span class="line">  value : <span class="string">'sophia'</span>,</span><br><span class="line">  writable : <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历对象自身所有属性，并将其打印出来</span></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyNames(o).forEach(<span class="function"><span class="params">key</span> =&gt;</span> <span class="built_in">console</span>.log(key, o[key]));</span><br></pre></td></tr></table></figure>
+<p>详见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames" target="_blank" rel="noopener">Object​.get​OwnProperty​Names()</a>。</p>
+<h3 id="4-遍历对象所有可枚举属性（自身和继承）"><a href="#4-遍历对象所有可枚举属性（自身和继承）" class="headerlink" title="4. 遍历对象所有可枚举属性（自身和继承）"></a>4. 遍历对象所有可枚举属性（自身和继承）</h3><h4 id="4-1-使用-for-in"><a href="#4-1-使用-for-in" class="headerlink" title="4.1. 使用 for...in"></a>4.1. 使用 <code>for...in</code></h4><p>JavaScript中使用 <code>for..in</code> 来遍历对象所有的可枚举属性（自身和继承）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span>,</span><br><span class="line">  b : <span class="string">'bran'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 为对象定义一个不可枚举属性 c</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'c'</span>, &#123;</span><br><span class="line">  configurable : <span class="literal">true</span>,</span><br><span class="line">  enumerable : <span class="literal">false</span>,</span><br><span class="line">  value : <span class="string">'sophia'</span>,</span><br><span class="line">  writable : <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历对象所有可枚举属性</span></span><br><span class="line"><span class="keyword">var</span> key;</span><br><span class="line"><span class="keyword">for</span>(key <span class="keyword">in</span> o)</span><br><span class="line">  <span class="built_in">console</span>.log(key, o[key]);</span><br></pre></td></tr></table></figure>
+<p>详见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/for...in" target="_blank" rel="noopener">for…in</a>。</p>
+<h4 id="4-2-通过遍历原型链的方式"><a href="#4-2-通过遍历原型链的方式" class="headerlink" title="4.2. 通过遍历原型链的方式"></a>4.2. 通过遍历原型链的方式</h4><p>通过遍历原型链，然后在每一个原型对象上获取可枚举属性的方式来获取对象所有的可枚举属性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span>,</span><br><span class="line">  b : <span class="string">'bran'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 为对象定义一个不可枚举属性 c</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'c'</span>, &#123;</span><br><span class="line">  configurable : <span class="literal">true</span>,</span><br><span class="line">  enumerable : <span class="literal">false</span>,</span><br><span class="line">  value : <span class="string">'sophia'</span>,</span><br><span class="line">  writable : <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> currentObj = o;</span><br><span class="line"><span class="keyword">while</span>(currentObj) &#123;</span><br><span class="line">  <span class="comment">// 遍历原型链上当前对象自身可枚举属性</span></span><br><span class="line">  <span class="built_in">Object</span>.keys(currentObj).forEach(<span class="function"><span class="params">key</span> =&gt;</span> <span class="built_in">console</span>.log(key, currentObj[key]));</span><br><span class="line">  <span class="comment">// 迭代原型</span></span><br><span class="line">  currentObj = <span class="built_in">Object</span>.getPrototypeOf(currentObj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>详见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/GetPrototypeOf" target="_blank" rel="noopener">Object​.get​PrototypeOf()</a>。</p>
+<h3 id="5-遍历对象所有属性"><a href="#5-遍历对象所有属性" class="headerlink" title="5. 遍历对象所有属性"></a>5. 遍历对象所有属性</h3><p>通过遍历原型链，然后在每一个原型对象上获取当前原型对象所有属性的方式来获取对象所有的属性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a : <span class="number">1</span>,</span><br><span class="line">  b : <span class="string">'bran'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 为对象定义一个不可枚举属性 c</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'c'</span>, &#123;</span><br><span class="line">  configurable : <span class="literal">true</span>,</span><br><span class="line">  enumerable : <span class="literal">false</span>,</span><br><span class="line">  value : <span class="string">'sophia'</span>,</span><br><span class="line">  writable : <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> currentObj = o;</span><br><span class="line"><span class="keyword">while</span>(currentObj) &#123;</span><br><span class="line">  <span class="comment">// 遍历原型链上当前对象所有属性</span></span><br><span class="line">  <span class="built_in">Object</span>.getOwnPropertyNames(currentObj).forEach(<span class="function"><span class="params">propName</span> =&gt;</span> <span class="built_in">console</span>.log(propName, currentObj[propName]));</span><br><span class="line">  <span class="comment">// 迭代原型</span></span><br><span class="line">  currentObj = <span class="built_in">Object</span>.getPrototypeOf(currentObj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>详见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/GetPrototypeOf" target="_blank" rel="noopener">Object​.get​PrototypeOf()</a>。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <footer>
+        <div class="author" align="right">
+            <a href="http://www.shifeiqi.top">
+                    凌云
+            </a>
+        </div>
+        <br>
+        Published under 
+        <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+            (CC) BY-NC-SA
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ECMA/">ECMA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ECMAScript/">ECMAScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+
+            <!-- 
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/&title=《枚举对象属性》 — 凌云的个人博客&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/&title=《枚举对象属性》 — 凌云的个人博客&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《枚举对象属性》 — 凌云的个人博客&url=http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+ -->
+
+        </div>
+    </div>
+
+    <!-- 
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/05/08/2019-05-08-property_descriptors/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">属性描述符</h4>
+      </a>
+    </div>
+  
+</nav>
+
+ -->
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div> -->
+    <div class="bottom">
+        <p><span>凌云 &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/&title=《枚举对象属性》 — 凌云的个人博客&pic=http://www.shifeiqi.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/&title=《枚举对象属性》 — 凌云的个人博客&source=凌云的博客" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《枚举对象属性》 — 凌云的个人博客&url=http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/&via=http://www.shifeiqi.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.shifeiqi.top/2019/05/12/2019-05-12-enumerate_properties/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACpUlEQVR42u3aQW7cQAwEQP//0841QCClm5wx1kDpJHhXFksHkUvy6ys+vh+Ofz/9+y/v5+/Xvv/PwwceHh7eodDfb9ki8zvOHsHTtXh4eHj3eE9BvL/Q8zdz8uk+SeDh4eH9Ll77CGaJBA8PD+838t7PZyVyS8LDw8P7BF7SaMjL3Pw7CfiHei14eHh4Ma9tKHzC+ZX5Hh4eHt56qj5LAO8F9H4FoYgWDw8P7wIvf+HmJW/+aDbJqYgTDw8P7zJvH1z+CNrFgmHxjYeHh3eBtw8ub+C2BXc97rrx7PHw8PBGRer+NZ2Hvr8LHh4e3j3epvWQJ4/3QPMFrMPTPDw8PLxDu0azcnY2yjqVih7vhYeHh3eZt2+S5oP/5Kqk1K4ne3h4eHhrXt44SNaq2gQwSzN1UY6Hh4f3g7z9RKlNGHkyKB4oHh4e3gVeW8i2JXXbhpitKfwnQjw8PLxDvE3DdDNzy4v4fFAXZTw8PDy8o7xNe2JWoCeB5omq2CnDw8PDW/Da1kDbdGhL5zr0dsqHh4eHt+bNbtC2ZdsmQtuMeDzHw8PDu8Bry9bZckAeUL6YNVy6wsPDw7vAa1PFbKx1YF6XrzXg4eHhXePNRv6zsng2KpuN7vDw8PDu8dqW66zY3ePrtQM8PDy8a7x2lWrTip0Nw4bjOjw8PLxrvM3QK29V5KtabVehHoDh4eHhXeC15XWeNpJyvG1bPF6Fh4eHd5T3XR6nGg37BYLoseLh4eFd4LUv3HbJYLZAkJfmp9IJHh4eXsvbj6byINrmb5s26vkbHh4e3oLXBt0W05vlg9WBh4eH92G8U9+cNZSjUhsPDw/vY3htazVvNCSRFOkEDw8P7xpvVhbvR1azpnBxFzw8PLwLvNkv+rqdOiLNEg8eHh7eNd4fX/h9gs1nWR0AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '凌云';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '凌云';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
