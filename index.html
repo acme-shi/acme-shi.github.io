@@ -179,8 +179,9 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        1. 写在前面在日常开发，尤其是类库的开发过程中，遍历对象属性是一项经常使用的操作。本文将介绍如何遍历对象自身可枚举属性、遍历对象自身全部属性、遍历对象可枚举属性、遍历对象全部属性 四方面的内容。
-2. 遍历对象自身可枚举属性2.1. 使用接口 Object.keys(obj)JavaScript 提供内置接口 Object.keys(obj) 用来获取对象自身的（非继承）、可枚举的属性名称...
+        写在前面在日常开发，尤其是类库的开发过程中，遍历对象属性是一项经常使用的操作。本文将介绍如何遍历对象自身可枚举属性、遍历对象自身全部属性、遍历对象全部可枚举属性、遍历对象全部属性 四方面的内容。
+遍历对象自身可枚举属性使用接口 Object.keys(obj)JavaScript 提供内置接口 Object.keys(obj) 用来获取对象自身的（非继承）、可枚举的属性名称集合。
+12345...
     
 
         <a href="/2019/05/12/2019-05-12-enumerate_properties/" class="post-more waves-effect waves-button">
@@ -226,7 +227,8 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        1. 属性描述符简介1.1. 什么是属性描述符属性描述符(property descriptor)是JavaScript提供的内置对象，用来配置JavaScript对象属性，控制JavaScript对象属性的行为（如控制属性是否可配置，是否可枚举，是否可写等等）。属性描述符(property descriptor) 在JavaScript内部表现为一个JavaScript对象，具有明确的键值...
+        属性描述符简介什么是属性描述符属性描述符(property descriptor)是JavaScript提供的内置对象，用来配置JavaScript对象属性，控制JavaScript对象属性的行为（如控制属性是否可配置，是否可枚举，是否可写等等）。属性描述符(property descriptor) 在JavaScript内部表现为一个JavaScript对象，具有明确的键值对。如下所示：
+...
     
 
         <a href="/2019/05/08/2019-05-08-property_descriptors/" class="post-more waves-effect waves-button">
